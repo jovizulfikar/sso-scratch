@@ -1,6 +1,6 @@
-package com.example.port.repository;
+package com.oauth2core.port.repository;
 
-import com.example.domain.entity.Client;
+import com.oauth2core.domain.entity.Client;
 
 import java.util.Optional;
 

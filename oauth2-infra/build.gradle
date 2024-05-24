@@ -17,6 +17,14 @@ configurations {
 	}
 }
 
+bootJar {
+	enabled = false
+}
+
+jar {
+	enabled = true
+}
+
 repositories {
 	mavenCentral()
 }
@@ -34,7 +42,9 @@ dependencies {
 	implementation 'com.aventrix.jnanoid:jnanoid:2.0.0'
 	implementation 'org.bitbucket.b_c:jose4j:0.9.6'
 	runtimeOnly 'org.postgresql:postgresql'
-	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
+	implementation 'org.passay:passay:1.6.4'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.15.3'
 }
 
 tasks.named('test') {

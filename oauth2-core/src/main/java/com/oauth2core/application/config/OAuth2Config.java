@@ -1,4 +1,4 @@
-package com.example.oauth2service.application.config;
+package com.oauth2core.application.config;
 
 import lombok.Data;
 

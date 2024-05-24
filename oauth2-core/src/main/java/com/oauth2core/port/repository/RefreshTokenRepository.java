@@ -1,6 +1,6 @@
-package com.example.port.repository;
+package com.oauth2core.port.repository;
 
-import com.example.domain.entity.RefreshToken;
+import com.oauth2core.domain.entity.RefreshToken;
 
 public interface RefreshTokenRepository {
     RefreshToken save(RefreshToken refreshToken);

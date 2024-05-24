@@ -1,30 +1,42 @@
-package com.example.domain.entity;
+package com.oauth2core.domain.entity;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class Client {
+
     private String id;
-//    private Instant issuedAt;
     private String clientId;
-    private Set<String> secrets;
-//    private Instant expiresAt;
     private String name;
-//    private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
+    private LocalDateTime issuedAt;
+
+    @Builder.Default
+    private Set<ClientSecret> secrets = new HashSet<>();
+
+    @Builder.Default
     private Set<String> grantTypes = new HashSet<>();
-//    private Set<String> redirectUris;
-//    private Set<String> postLogoutRedirectUris;
-    private Set<String> scopes;
-//    private ClientSettings clientSettings;
-//    private TokenSettings tokenSettings;
-    private Set<String> claims;
+
+    @Builder.Default
+    private Set<ApiScope> apiScopes = new HashSet<>();
+
+    // @Builder.Default
+    // private Set<String> claims = new HashSet<>();
+
+    @Builder.Default
     private Long accessTokenTtl = TimeUnit.HOURS.toSeconds(1);
+
+    @Builder.Default
     private Long refreshTokenTtl = TimeUnit.DAYS.toSeconds(30);
+
+    @Builder.Default
     private Set<String> audienceUris = new HashSet<>();
 }

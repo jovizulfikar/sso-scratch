@@ -1,4 +1,4 @@
-package com.example.oauth2rest.jpa.entity;
+package com.example.oauth2infra.jpa.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import lombok.Setter;
 public class JpaUser {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private String id;
 
     @Column(name = "username", unique = true, nullable = false)

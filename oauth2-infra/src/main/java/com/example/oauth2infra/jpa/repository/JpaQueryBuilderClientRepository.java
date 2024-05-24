@@ -1,11 +1,12 @@
-package com.example.oauth2rest.jpa.repository;
+package com.example.oauth2infra.jpa.repository;
 
-import com.example.oauth2rest.jpa.entity.JpaClient;
-import com.example.oauth2rest.util.MapperUtil;
+import com.example.oauth2infra.jpa.entity.JpaClient;
+import com.example.oauth2infra.util.MapperUtil;
 import com.oauth2core.domain.entity.Client;
 import com.oauth2core.port.repository.ClientRepository;
 import com.oauth2core.port.util.IdGenerator;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -37,20 +38,35 @@ public class JpaQueryBuilderClientRepository implements ClientRepository {
     }
 
     @Override
+    @Transactional
     public Client save(Client client) {
         if (Objects.isNull(client.getId())) {
-            client.setId(idGenerator.generate());
-            entityManager.persist(client);
+            cleanEntity(client);
+            entityManager.persist(mapper.clientToJpaClient(client));
             return client;
         }
 
         var existingClient = entityManager.find(JpaClient.class, client.getClientId());
+        cleanEntity(client);
         if (Objects.isNull(existingClient)) {
-            entityManager.persist(client);
+            entityManager.persist(mapper.clientToJpaClient(client));
         } else {
-            entityManager.merge(client);
+            entityManager.merge(mapper.clientToJpaClient(client));
         }
 
         return client;
+    }
+
+    private void cleanEntity(Client client) {
+        if (Objects.isNull(client.getId())) {
+            client.setId(idGenerator.generate());
+        }
+
+        client.getSecrets().forEach(secret -> {
+            secret.setClientId(client.getId());
+            if (Objects.isNull(secret.getId())) {
+                secret.setId(idGenerator.generate());
+            }
+        });
     }
 }

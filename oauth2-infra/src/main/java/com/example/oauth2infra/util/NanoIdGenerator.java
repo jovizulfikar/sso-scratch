@@ -1,4 +1,4 @@
-package com.example.oauth2rest.util;
+package com.example.oauth2infra.util;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.oauth2core.port.util.IdGenerator;

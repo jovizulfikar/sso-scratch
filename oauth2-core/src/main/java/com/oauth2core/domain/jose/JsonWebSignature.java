@@ -1,6 +1,6 @@
-package com.example.domain.jose;
+package com.oauth2core.domain.jose;
 
-import com.example.domain.oauth2.JwtClaims;
+import com.oauth2core.domain.oauth2.JwtClaims;
 import lombok.Builder;
 import lombok.Getter;
 

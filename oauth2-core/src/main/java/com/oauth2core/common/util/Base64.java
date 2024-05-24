@@ -1,4 +1,4 @@
-package com.example.oauth2service.common.util;
+package com.oauth2core.common.util;
 
 import java.nio.charset.StandardCharsets;
 

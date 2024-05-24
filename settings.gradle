@@ -1,1 +1,3 @@
 rootProject.name = 'spring-oauth2-scratch'
+
+include 'oauth2-core', 'oauth2-infra', 'oauth2-rest', 'oauth2-shell'

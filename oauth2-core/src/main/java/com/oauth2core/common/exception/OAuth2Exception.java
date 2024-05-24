@@ -1,4 +1,4 @@
-package com.example.oauth2service.common.exception;
+package com.oauth2core.common.exception;
 
 import lombok.Getter;
 

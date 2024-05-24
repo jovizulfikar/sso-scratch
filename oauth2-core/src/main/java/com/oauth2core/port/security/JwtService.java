@@ -1,7 +1,7 @@
-package com.example.port.security;
+package com.oauth2core.port.security;
 
-import com.example.domain.jose.JsonWebSignature;
-import com.example.domain.oauth2.JwtClaims;
+import com.oauth2core.domain.jose.JsonWebSignature;
+import com.oauth2core.domain.oauth2.JwtClaims;
 
 import java.security.Key;
 

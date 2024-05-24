@@ -1,13 +1,13 @@
-package com.example.oauth2service;
+package com.example.oauth2rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Oauth2Application {
+public class Oauth2RestApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Oauth2Application.class, args);
+		SpringApplication.run(Oauth2RestApplication.class, args);
 	}
 
 }

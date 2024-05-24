@@ -1,8 +1,8 @@
-package com.example.oauth2rest.application.usecase.authentication.provider;
+package com.oauth2core.application.usecase.authentication.provider;
 
-import com.example.oauth2rest.application.service.TokenManager;
-import com.example.oauth2service.application.usecase.authentication.AccessTokenRequest;
-import com.example.oauth2service.application.usecase.authentication.AccessTokenResponse;
+import com.oauth2core.application.service.TokenManager;
+import com.oauth2core.application.usecase.authentication.AccessTokenRequest;
+import com.oauth2core.application.usecase.authentication.AccessTokenResponse;
 import com.oauth2core.common.exception.AppException;
 import com.oauth2core.domain.oauth2.AuthorizationGrantType;
 import com.oauth2core.domain.oauth2.TokenType;
@@ -45,7 +45,8 @@ public class ResourceOwnerPasswordCredentials implements AuthenticationProvider 
         }
 
         var scopes = Arrays.stream(accessTokenRequest.getScope().split("\\s+"))
-                .filter(s -> client.getScopes().contains(s))
+                .filter(s -> client.getApiScopes().stream()
+                    .anyMatch(apiScope -> apiScope.getName().equalsIgnoreCase(s)))
                 .collect(Collectors.toSet());
 
         var accessToken = tokenManager.generateAccessToken(client, user, scopes);

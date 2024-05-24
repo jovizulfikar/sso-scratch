@@ -1,7 +1,7 @@
-package com.example.oauth2rest.util;
+package com.example.oauth2infra.util;
 
-import com.example.oauth2rest.jpa.entity.JpaClient;
-import com.example.oauth2rest.jpa.entity.JpaUser;
+import com.example.oauth2infra.jpa.entity.JpaClient;
+import com.example.oauth2infra.jpa.entity.JpaUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;

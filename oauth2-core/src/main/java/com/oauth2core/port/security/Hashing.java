@@ -1,4 +1,4 @@
-package com.example.port.security;
+package com.oauth2core.port.security;
 
 public interface Hashing {
     String hash(String src);

@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+spring-shell.log
+src/.DS_Store
+src/main/.DS_Store

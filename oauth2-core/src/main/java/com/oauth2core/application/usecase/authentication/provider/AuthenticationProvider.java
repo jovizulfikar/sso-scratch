@@ -1,7 +1,7 @@
-package com.example.oauth2rest.application.usecase.authentication.provider;
+package com.oauth2core.application.usecase.authentication.provider;
 
-import com.example.oauth2service.application.usecase.authentication.AccessTokenRequest;
-import com.example.oauth2service.application.usecase.authentication.AccessTokenResponse;
+import com.oauth2core.application.usecase.authentication.AccessTokenRequest;
+import com.oauth2core.application.usecase.authentication.AccessTokenResponse;
 
 public interface AuthenticationProvider {
     String ERROR_UNKNOWN_CLIENT = "AUTHENTICATION_PROVIDER.CLIENT_UNKNOWN_CLIENT";

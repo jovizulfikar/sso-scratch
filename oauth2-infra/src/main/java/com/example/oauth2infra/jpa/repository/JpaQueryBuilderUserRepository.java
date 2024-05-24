@@ -1,7 +1,7 @@
-package com.example.oauth2rest.jpa.repository;
+package com.example.oauth2infra.jpa.repository;
 
-import com.example.oauth2rest.jpa.entity.JpaUser;
-import com.example.oauth2rest.util.MapperUtil;
+import com.example.oauth2infra.jpa.entity.JpaUser;
+import com.example.oauth2infra.util.MapperUtil;
 import com.oauth2core.domain.entity.User;
 import com.oauth2core.port.repository.UserRepository;
 import jakarta.persistence.EntityManager;

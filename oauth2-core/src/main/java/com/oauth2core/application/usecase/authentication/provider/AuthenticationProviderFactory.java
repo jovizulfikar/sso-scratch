@@ -1,4 +1,4 @@
-package com.example.oauth2rest.application.usecase.authentication.provider;
+package com.oauth2core.application.usecase.authentication.provider;
 
 import com.oauth2core.common.exception.AppException;
 import com.oauth2core.domain.oauth2.AuthorizationGrantType;

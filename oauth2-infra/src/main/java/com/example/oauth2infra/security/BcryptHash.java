@@ -1,4 +1,4 @@
-package com.example.oauth2rest.security;
+package com.example.oauth2infra.security;
 
 import com.oauth2core.port.security.Hashing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

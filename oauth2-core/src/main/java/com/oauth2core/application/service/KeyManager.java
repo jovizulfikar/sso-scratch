@@ -1,6 +1,6 @@
-package com.example.oauth2rest.application.service;
+package com.oauth2core.application.service;
 
-import com.example.oauth2service.application.config.OAuth2Config;
+import com.oauth2core.application.config.OAuth2Config;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

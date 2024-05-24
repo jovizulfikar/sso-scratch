@@ -1,4 +1,4 @@
-package com.example.oauth2service.application.usecase.authentication;
+package com.oauth2core.application.usecase.authentication;
 
 import lombok.Builder;
 import lombok.Data;
