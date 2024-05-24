@@ -1,7 +1,7 @@
-package com.example.springoauth2scratch.application.usecase.authentication.provider;
+package com.example.springoauth2scratch.application.authentication.provider;
 
-import com.example.springoauth2scratch.application.usecase.authentication.AccessTokenRequest;
-import com.example.springoauth2scratch.application.usecase.authentication.AccessTokenResponse;
+import com.example.springoauth2scratch.application.authentication.AccessTokenRequest;
+import com.example.springoauth2scratch.application.authentication.AccessTokenResponse;
 
 public interface AuthenticationProvider {
     String ERROR_UNKNOWN_CLIENT = "AUTHENTICATION_PROVIDER.CLIENT_UNKNOWN_CLIENT";

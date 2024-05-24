@@ -1,4 +1,4 @@
-package com.example.springoauth2scratch.application.usecase.authentication;
+package com.example.springoauth2scratch.application.authentication;
 
 import lombok.Builder;
 import lombok.Data;

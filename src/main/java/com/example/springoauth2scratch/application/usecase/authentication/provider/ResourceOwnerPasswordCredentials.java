@@ -1,13 +1,12 @@
-package com.example.springoauth2scratch.application.usecase.authentication.provider;
+package com.example.springoauth2scratch.application.authentication.provider;
 
+import com.example.springoauth2scratch.application.authentication.AccessTokenRequest;
+import com.example.springoauth2scratch.application.authentication.AccessTokenResponse;
 import com.example.springoauth2scratch.application.service.TokenManager;
-import com.example.springoauth2scratch.application.usecase.authentication.AccessTokenRequest;
-import com.example.springoauth2scratch.application.usecase.authentication.AccessTokenResponse;
 import com.example.springoauth2scratch.common.exception.AppException;
-import com.example.springoauth2scratch.common.util.Base64;
 import com.example.springoauth2scratch.domain.oauth2.AuthorizationGrantType;
 import com.example.springoauth2scratch.domain.oauth2.TokenType;
-import com.example.springoauth2scratch.port.CanHash;
+import com.example.springoauth2scratch.port.security.Hashing;
 import com.example.springoauth2scratch.port.repository.ClientRepository;
 import com.example.springoauth2scratch.port.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,27 +20,19 @@ public class ResourceOwnerPasswordCredentials implements AuthenticationProvider 
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
     private final TokenManager tokenManager;
-    private final CanHash clientSecretHash;
-    private final CanHash passwordHash;
+    private final Hashing passwordHash;
 
     @Override
     @SneakyThrows
     public AccessTokenResponse authenticate(AccessTokenRequest accessTokenRequest) {
-        var clientId = Base64.decode(accessTokenRequest.getClientId());
-        var clientSecret = Base64.decode(accessTokenRequest.getClientSecret());
+        var clientId = accessTokenRequest.getClientId();
 
-        // verify client id
+        // fetch client id
         var client = clientRepository.findByClientId(clientId)
                 .orElseThrow(() -> AppException.build(ERROR_UNKNOWN_CLIENT));
 
-        // verify client secret
-        client.getSecrets().stream()
-                .filter(s -> clientSecretHash.verify(clientSecret, s))
-                .findFirst()
-                .orElseThrow(() -> AppException.build(ERROR_UNKNOWN_CLIENT));
-
         // verify client grants
-        if (!client.getAuthorizationGrantTypes().contains(AuthorizationGrantType.PASSWORD.getGranType())) {
+        if (!client.getGrantTypes().contains(AuthorizationGrantType.PASSWORD.getGranType())) {
             throw AppException.build(ERROR_UNAUTHORIZED_CLIENT);
         }
 

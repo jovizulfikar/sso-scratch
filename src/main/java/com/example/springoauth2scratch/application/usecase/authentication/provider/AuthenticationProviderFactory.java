@@ -1,4 +1,4 @@
-package com.example.springoauth2scratch.application.usecase.authentication.provider;
+package com.example.springoauth2scratch.application.authentication.provider;
 
 import com.example.springoauth2scratch.common.exception.AppException;
 import com.example.springoauth2scratch.domain.oauth2.AuthorizationGrantType;

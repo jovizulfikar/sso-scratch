@@ -7,4 +7,5 @@ public class OAuth2Config {
     private final String issuer;
     private final String privateKey;
     private final String publicKey;
+    private final String keyId;
 }
