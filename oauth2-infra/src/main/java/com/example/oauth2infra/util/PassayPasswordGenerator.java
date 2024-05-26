@@ -3,9 +3,10 @@ package com.example.oauth2infra.util;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.springframework.stereotype.Component;
-import org.passay.CharacterData;
 
-import com.oauth2core.port.util.PasswordGenerator;
+import com.example.oauth2core.port.util.PasswordGenerator;
+
+import org.passay.CharacterData;
 
 @Component
 public class PassayPasswordGenerator implements PasswordGenerator {

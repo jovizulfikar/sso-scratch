@@ -1,10 +1,11 @@
 package com.example.oauth2infra.jpa.repository;
 
+import com.example.oauth2core.domain.entity.Client;
+import com.example.oauth2core.port.repository.ClientRepository;
+import com.example.oauth2core.port.util.IdGenerator;
 import com.example.oauth2infra.jpa.entity.JpaClient;
 import com.example.oauth2infra.util.MapperUtil;
-import com.oauth2core.domain.entity.Client;
-import com.oauth2core.port.repository.ClientRepository;
-import com.oauth2core.port.util.IdGenerator;
+
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class JpaQueryBuilderClientRepository implements ClientRepository {
                 .getResultList()
                 .stream()
                 .findFirst()
-                .map(mapper::jpaClientToClient);
+                .map(mapper::client);
     }
 
     @Override
@@ -42,16 +43,16 @@ public class JpaQueryBuilderClientRepository implements ClientRepository {
     public Client save(Client client) {
         if (Objects.isNull(client.getId())) {
             cleanEntity(client);
-            entityManager.persist(mapper.clientToJpaClient(client));
+            entityManager.persist(mapper.jpaClient(client));
             return client;
         }
 
-        var existingClient = entityManager.find(JpaClient.class, client.getClientId());
+        var existingClient = entityManager.find(JpaClient.class, client.getId());
         cleanEntity(client);
         if (Objects.isNull(existingClient)) {
-            entityManager.persist(mapper.clientToJpaClient(client));
+            entityManager.persist(mapper.jpaClient(client));
         } else {
-            entityManager.merge(mapper.clientToJpaClient(client));
+            entityManager.merge(mapper.jpaClient(client));
         }
 
         return client;

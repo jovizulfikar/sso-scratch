@@ -1,13 +1,15 @@
 package com.example.oauth2infra.util;
 
+import com.example.oauth2core.domain.entity.Client;
+import com.example.oauth2core.domain.entity.User;
+import com.example.oauth2core.domain.oauth2.JwtClaims;
 import com.example.oauth2infra.jpa.entity.JpaClient;
 import com.example.oauth2infra.jpa.entity.JpaUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oauth2core.domain.entity.Client;
-import com.oauth2core.domain.entity.User;
+
 import lombok.SneakyThrows;
 import org.mapstruct.Mapper;
 
@@ -21,7 +23,7 @@ public interface MapperUtil {
             .setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     @SneakyThrows
-    default String toJson(Object o) {
+    default String toJson(JwtClaims o) {
         return OBJECT_MAPPER.writeValueAsString(o);
     }
 
@@ -30,7 +32,8 @@ public interface MapperUtil {
         });
     }
 
-    Client jpaClientToClient(JpaClient jpaClient);
-    User jpaUserToUser(JpaUser jpaUser);
-    JpaClient clientToJpaClient(Client client);
+    Client client(JpaClient jpaClient);
+    User user(JpaUser jpaUser);
+    JpaClient jpaClient(Client client);
+    JpaUser jpaUser(User user);
 }

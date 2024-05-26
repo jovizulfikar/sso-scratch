@@ -1,10 +1,11 @@
 package com.example.oauth2infra.security;
 
+import com.example.oauth2core.domain.jose.JsonWebSignature;
+import com.example.oauth2core.domain.jose.SignatureAlgorithm;
+import com.example.oauth2core.domain.oauth2.JwtClaims;
+import com.example.oauth2core.port.security.JwtService;
 import com.example.oauth2infra.util.MapperUtil;
-import com.oauth2core.domain.jose.JsonWebSignature;
-import com.oauth2core.domain.jose.SignatureAlgorithm;
-import com.oauth2core.domain.oauth2.JwtClaims;
-import com.oauth2core.port.security.JwtService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jose4j.jwa.AlgorithmConstraints;

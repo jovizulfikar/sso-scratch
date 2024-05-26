@@ -1,11 +1,13 @@
 package com.example.oauth2infra.security;
 
-import com.oauth2core.port.security.Hashing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.oauth2core.port.security.Hashing;
+
 @Service
 public class BcryptHash implements Hashing {
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override

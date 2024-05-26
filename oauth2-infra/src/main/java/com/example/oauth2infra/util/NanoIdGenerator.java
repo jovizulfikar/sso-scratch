@@ -1,7 +1,8 @@
 package com.example.oauth2infra.util;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
-import com.oauth2core.port.util.IdGenerator;
+import com.example.oauth2core.port.util.IdGenerator;
+
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

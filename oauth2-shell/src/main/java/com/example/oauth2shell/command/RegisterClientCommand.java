@@ -4,8 +4,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import com.example.oauth2core.application.usecase.RegisterClientUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oauth2core.application.usecase.RegisterClientUseCase;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
