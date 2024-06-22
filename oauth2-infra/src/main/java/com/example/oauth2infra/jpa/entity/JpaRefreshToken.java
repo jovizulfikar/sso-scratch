@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class JpaRefreshToken {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private String id;
 
     @Column(name = "value", unique = true)

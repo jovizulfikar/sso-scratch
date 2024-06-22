@@ -3,12 +3,14 @@ package com.example.oauth2infra;
 import com.example.oauth2core.application.service.JwsService;
 import com.example.oauth2core.application.service.KeyManager;
 import com.example.oauth2core.application.service.RefreshTokenService;
+import com.example.oauth2core.application.usecase.CreateApiScopeUseCase;
 import com.example.oauth2core.application.usecase.RegisterClientUseCase;
 import com.example.oauth2core.application.usecase.RegisterUserUseCase;
 import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2core.application.usecase.authentication.provider.ClientCredentials;
 import com.example.oauth2core.application.usecase.authentication.provider.ResourceOwnerPasswordCredentials;
 import com.example.oauth2infra.config.OAuth2Config;
+import com.example.oauth2infra.jpa.repository.JpaQueryBuilderApiScopeRepository;
 import com.example.oauth2infra.jpa.repository.JpaQueryBuilderClientRepository;
 import com.example.oauth2infra.jpa.repository.JpaQueryBuilderRefreshTokenRepository;
 import com.example.oauth2infra.jpa.repository.JpaQueryBuilderUserRepository;
@@ -37,6 +39,7 @@ public class ServiceContainer {
     private final JpaQueryBuilderClientRepository jpaQueryBuilderClientRepository;
     private final JpaQueryBuilderUserRepository jpaQueryBuilderUserRepository;
     private final JpaQueryBuilderRefreshTokenRepository jpaQueryBuilderRefreshTokenRepository;
+    private final JpaQueryBuilderApiScopeRepository jpaApiScopeRepository;
     
     @Bean
     public RegisterClientUseCase registerClientUseCase() {
@@ -85,5 +88,10 @@ public class ServiceContainer {
     @Bean
     public ResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials() {
         return new ResourceOwnerPasswordCredentials(jpaQueryBuilderClientRepository, jpaQueryBuilderUserRepository, bcryptHash, jwsService(), bitbucketJoseJwtService, refreshTokenService());
+    }
+
+    @Bean
+    public CreateApiScopeUseCase createApiScopeUseCase() {
+        return new CreateApiScopeUseCase(jpaApiScopeRepository);
     }
 }

@@ -1,9 +1,11 @@
 package com.example.oauth2infra.util;
 
+import com.example.oauth2core.domain.entity.ApiScope;
 import com.example.oauth2core.domain.entity.Client;
 import com.example.oauth2core.domain.entity.RefreshToken;
 import com.example.oauth2core.domain.entity.User;
 import com.example.oauth2core.domain.oauth2.JwtClaims;
+import com.example.oauth2infra.jpa.entity.JpaApiScope;
 import com.example.oauth2infra.jpa.entity.JpaClient;
 import com.example.oauth2infra.jpa.entity.JpaRefreshToken;
 import com.example.oauth2infra.jpa.entity.JpaUser;
@@ -39,4 +41,6 @@ public interface MapperUtil {
     JpaClient jpaClient(Client client);
     JpaUser jpaUser(User user);
     JpaRefreshToken jpaRefreshToken(RefreshToken refreshToken);
+    ApiScope apiScope(JpaApiScope jpaApiScope);
+    JpaApiScope jpaApiScope(ApiScope apiScope);
 }
