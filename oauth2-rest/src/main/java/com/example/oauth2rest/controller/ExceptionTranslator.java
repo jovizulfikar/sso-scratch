@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,10 @@ import com.example.oauth2core.common.exception.ValidationException;
 public class ExceptionTranslator {
 
     public static ProblemDetail defaultProblemDetail() {
-        ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.");
-        detail.setType(URI.create("/errors/" + detail.getTitle().toLowerCase().replace(" ", "-")));
-        return detail;
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.");
+        var title = Optional.ofNullable(problemDetail.getTitle()).orElse("");
+        problemDetail.setType(URI.create("/errors/" + title.toLowerCase().replace(" ", "-")));
+        return problemDetail;
     }
 
     public static ProblemDetail toProblemDetail(AppException e) {
