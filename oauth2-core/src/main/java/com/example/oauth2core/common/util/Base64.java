@@ -2,6 +2,10 @@ package com.example.oauth2core.common.util;
 
 import java.nio.charset.StandardCharsets;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Base64 {
 
     public static String encode(String src) {

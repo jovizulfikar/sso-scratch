@@ -1,12 +1,15 @@
 package com.example.oauth2core.application.usecase.authentication;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class AccessTokenRequest {
     private String grantType;
     private String username;
     private String password;
     private String scope;
     private String clientId;
+    private String clientSecret;
 }

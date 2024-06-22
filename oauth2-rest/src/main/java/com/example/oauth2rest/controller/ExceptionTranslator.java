@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
 import com.example.oauth2core.application.usecase.RegisterUserUseCase;
+import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProvider;
+import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2core.common.exception.AppException;
 import com.example.oauth2core.common.exception.ValidationException;
 
@@ -29,6 +31,30 @@ public class ExceptionTranslator {
                 pd.setType(URI.create("/errors/register-user/username-already-taken"));
                 pd.setTitle("Username Already Taken");
                 pd.setDetail("The username you entered is already in use. Please choose a different username and try again.");
+                yield pd;
+            } case AuthenticationProviderFactory.ERROR_UNSUPPORTED_GRANT_TYPE: {
+                pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+                pd.setType(URI.create("/errors/authentication/unsupported-grant-type"));
+                pd.setTitle("Unsupported Grant Type");
+                pd.setDetail("The authorization grant type is not supported by the authorization server.");
+                yield pd;
+            } case AuthenticationProvider.ERROR_UNKNOWN_CLIENT: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/authentication/invalid-client"));
+                pd.setTitle("Invalid Client");
+                pd.setDetail("Client authentication failed. Client is unknown.");
+                yield pd;
+            } case AuthenticationProvider.ERROR_INVALID_CLIENT_SECRET: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/authentication/invalid-grant"));
+                pd.setTitle("Invalid Grant");
+                pd.setDetail("The provided authorization grant is invalid.");
+                yield pd;
+            } case AuthenticationProvider.ERROR_UNAUTHORIZED_AUTH_FLOW: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/authentication/unauthorized-client"));
+                pd.setTitle("Unauthorized Client");
+                pd.setDetail("The authenticated client is not authorized to use this authorization grant type.");
                 yield pd;
             }
             default: yield ExceptionTranslator.defaultProblemDetail();

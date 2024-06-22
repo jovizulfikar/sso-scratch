@@ -1,5 +1,12 @@
 package com.example.oauth2core.application.usecase;
 
+import com.example.oauth2core.domain.entity.Client;
+import com.example.oauth2core.domain.entity.ClientSecret;
+import com.example.oauth2core.domain.oauth2.AuthorizationGrantType;
+import com.example.oauth2core.port.repository.ClientRepository;
+import com.example.oauth2core.port.security.Hashing;
+import com.example.oauth2core.port.util.IdGenerator;
+import com.example.oauth2core.port.util.PasswordGenerator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,14 +15,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashSet;
-
-import com.example.oauth2core.domain.entity.Client;
-import com.example.oauth2core.domain.entity.ClientSecret;
-import com.example.oauth2core.domain.oauth2.AuthorizationGrantType;
-import com.example.oauth2core.port.repository.ClientRepository;
-import com.example.oauth2core.port.security.Hashing;
-import com.example.oauth2core.port.util.IdGenerator;
-import com.example.oauth2core.port.util.PasswordGenerator;
 
 @RequiredArgsConstructor
 public class RegisterClientUseCase {
@@ -55,7 +54,7 @@ public class RegisterClientUseCase {
         var client = Client.builder()
             .clientId(clientId)
             .name(command.clientName)
-            .grantTypes(new HashSet<>(Collections.singletonList(AuthorizationGrantType.PASSWORD.getGranType())))
+            .grantTypes(new HashSet<>(Collections.singletonList(AuthorizationGrantType.CLIENT_CREDENTIALS.getGranType())))
             .secrets(new HashSet<>(Collections.singletonList(clientSecret)))
             .issuedAt(LocalDateTime.now())
             .build();

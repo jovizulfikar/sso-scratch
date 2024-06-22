@@ -1,9 +1,11 @@
 package com.example.oauth2infra.util;
 
 import com.example.oauth2core.domain.entity.Client;
+import com.example.oauth2core.domain.entity.RefreshToken;
 import com.example.oauth2core.domain.entity.User;
 import com.example.oauth2core.domain.oauth2.JwtClaims;
 import com.example.oauth2infra.jpa.entity.JpaClient;
+import com.example.oauth2infra.jpa.entity.JpaRefreshToken;
 import com.example.oauth2infra.jpa.entity.JpaUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -36,4 +38,5 @@ public interface MapperUtil {
     User user(JpaUser jpaUser);
     JpaClient jpaClient(Client client);
     JpaUser jpaUser(User user);
+    JpaRefreshToken jpaRefreshToken(RefreshToken refreshToken);
 }
