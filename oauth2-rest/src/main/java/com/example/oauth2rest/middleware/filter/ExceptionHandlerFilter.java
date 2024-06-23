@@ -1,4 +1,4 @@
-package com.example.oauth2rest.middleware;
+package com.example.oauth2rest.middleware.filter;
 
 import com.example.oauth2core.common.exception.AppException;
 import com.example.oauth2rest.controller.RestExceptionHandler;

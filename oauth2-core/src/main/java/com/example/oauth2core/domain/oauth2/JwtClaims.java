@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Builder
@@ -19,7 +20,10 @@ public class JwtClaims {
     private String sub;
     private String clientId;
     private String jti;
-    private Set<String> scope;
+
+    @Builder.Default
+    private Set<String> scope = new HashSet<>();
+
     private Long authTime;
     private Byte acr;
     private String amr;

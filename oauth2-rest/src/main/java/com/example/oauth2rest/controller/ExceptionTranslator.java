@@ -18,7 +18,8 @@ import com.example.oauth2core.application.usecase.authentication.provider.Authen
 import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2core.common.exception.AppException;
 import com.example.oauth2core.common.exception.ValidationException;
-import com.example.oauth2rest.middleware.JwtAuthenticationFilter;
+import com.example.oauth2rest.middleware.filter.JwtAuthenticationFilter;
+import com.example.oauth2rest.middleware.interceptor.ApiScopeInterceptor;
 
 public class ExceptionTranslator {
 
@@ -79,6 +80,12 @@ public class ExceptionTranslator {
                 pd.setType(URI.create("/errors/unauthorized"));
                 pd.setTitle("Unauthorized");
                 pd.setDetail("Bearer token is missing or invalid.");
+                yield pd;
+            } case ApiScopeInterceptor.ERROR_INVALID_SCOPE: {
+                pd = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
+                pd.setType(URI.create("/errors/forbidden"));
+                pd.setTitle("Forbidden");
+                pd.setDetail("The provided JWT token does not have the required scope to access this resource.");
                 yield pd;
             }
             default: yield ExceptionTranslator.defaultProblemDetail();

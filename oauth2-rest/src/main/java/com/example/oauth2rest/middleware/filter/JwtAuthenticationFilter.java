@@ -1,4 +1,4 @@
-package com.example.oauth2rest.middleware;
+package com.example.oauth2rest.middleware.filter;
 
 import com.example.oauth2core.application.service.KeyManager;
 import com.example.oauth2core.common.exception.AppException;
@@ -47,8 +47,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } else {
             throw new AppException(ERROR_JWT_AUTH_FILTER_UNAUTHORIZED);
         }
+        
+        var claims = jwtService.verify(bearerToken, keyManager.getRsaPublicKey());
+        request.setAttribute("jwtClaims", claims);
 
-        jwtService.verify(bearerToken, keyManager.getRsaPublicKey());
         filterChain.doFilter(request, response);
     }
     
@@ -61,5 +63,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return patterns.parallelStream()
                 .noneMatch(pattern -> pattern.matches(PathContainer.parsePath("POST " + request.getRequestURI())));
 	}
-
 }
