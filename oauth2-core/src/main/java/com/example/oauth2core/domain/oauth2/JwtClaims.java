@@ -1,11 +1,15 @@
 package com.example.oauth2core.domain.oauth2;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class JwtClaims {
     private String iss;

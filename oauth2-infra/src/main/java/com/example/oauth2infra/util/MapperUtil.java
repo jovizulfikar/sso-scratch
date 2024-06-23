@@ -13,11 +13,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.SneakyThrows;
 import org.mapstruct.Mapper;
-
-import java.util.Map;
 
 @Mapper(componentModel = "spring")
 public interface MapperUtil {
@@ -31,9 +28,9 @@ public interface MapperUtil {
         return OBJECT_MAPPER.writeValueAsString(o);
     }
 
-    default <T> T mapTo(Map<String, Object> map) {
-        return OBJECT_MAPPER.convertValue(map, new TypeReference<>() {
-        });
+    @SneakyThrows
+    default <T> T fromJson(String json, TypeReference<T> typeReference) {
+        return OBJECT_MAPPER.readValue(json, typeReference);
     }
 
     Client client(JpaClient jpaClient);

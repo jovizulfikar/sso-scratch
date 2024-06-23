@@ -25,6 +25,7 @@ dependencies {
 	implementation project(':oauth2-core')
 	implementation project(':oauth2-infra')
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.bitbucket.b_c:jose4j:0.9.6'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jose4j.jwt.consumer.ErrorCodeValidator;
+import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
@@ -16,6 +18,7 @@ import com.example.oauth2core.application.usecase.authentication.provider.Authen
 import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2core.common.exception.AppException;
 import com.example.oauth2core.common.exception.ValidationException;
+import com.example.oauth2rest.middleware.JwtAuthenticationFilter;
 
 public class ExceptionTranslator {
 
@@ -23,6 +26,19 @@ public class ExceptionTranslator {
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.");
         var title = Optional.ofNullable(problemDetail.getTitle()).orElse("");
         problemDetail.setType(URI.create("/errors/" + title.toLowerCase().replace(" ", "-")));
+        return problemDetail;
+    }
+    
+    public static ProblemDetail toProblemDetail(InvalidJwtException e) { 
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "JWT rejected due to invalid claims or other invalid content.");
+        var title = Optional.ofNullable(problemDetail.getTitle()).orElse("");
+        var jwtErrors = e.getErrorDetails().stream().map(ErrorCodeValidator.Error::getErrorMessage).collect(Collectors.toSet());
+
+        Map<String, Set<String>> errors = new HashMap<>();
+        errors.put("jwt",jwtErrors);
+
+        problemDetail.setType(URI.create("/errors/" + title.toLowerCase().replace(" ", "-")));
+        problemDetail.setProperty("errors", errors);
         return problemDetail;
     }
 
@@ -57,6 +73,12 @@ public class ExceptionTranslator {
                 pd.setType(URI.create("/errors/authentication/unauthorized-client"));
                 pd.setTitle("Unauthorized Client");
                 pd.setDetail("The authenticated client is not authorized to use this authorization grant type.");
+                yield pd;
+            } case JwtAuthenticationFilter.ERROR_JWT_AUTH_FILTER_UNAUTHORIZED: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/unauthorized"));
+                pd.setTitle("Unauthorized");
+                pd.setDetail("Bearer token is missing or invalid.");
                 yield pd;
             }
             default: yield ExceptionTranslator.defaultProblemDetail();

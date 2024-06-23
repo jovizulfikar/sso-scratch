@@ -25,6 +25,7 @@ public class JwsService {
         var iat = System.currentTimeMillis();
         var exp = iat + TimeUnit.SECONDS.toMillis(client.getAccessTokenTtl());
         var jti = idGenerator.generate();
+        var aud = !client.getAudienceUris().isEmpty() ? client.getAudienceUris() : null;
 
         var rsaPrivateKey = keyManager.getRsaPrivateKey();
 
@@ -32,7 +33,7 @@ public class JwsService {
                 .iss(oauth2Config.getIssuer())
                 .exp(exp)
                 .iat(iat)
-                .aud(client.getAudienceUris())
+                .aud(aud)
                 .sub(userId)
                 .clientId(client.getClientId())
                 .jti(jti)

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.oauth2core.application.usecase.RegisterUserUseCase;
-
+import com.example.oauth2rest.annotation.ApiScope;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,6 +19,7 @@ public class UserController {
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping
+    @ApiScope("oauth2.register-user")
     public ResponseEntity<RegisterUserUseCase.Result> postMethodName(@RequestBody RegisterUserUseCase.Command request) {
         var response = registerUserUseCase.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

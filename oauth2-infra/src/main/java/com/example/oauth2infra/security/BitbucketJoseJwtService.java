@@ -5,7 +5,7 @@ import com.example.oauth2core.domain.jose.SignatureAlgorithm;
 import com.example.oauth2core.domain.oauth2.JwtClaims;
 import com.example.oauth2core.port.security.JwtService;
 import com.example.oauth2infra.util.MapperUtil;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jose4j.jwa.AlgorithmConstraints;
@@ -40,8 +40,8 @@ public class BitbucketJoseJwtService implements JwtService {
     public JwtClaims verify(String jwt, Key jwsPublicKey) {
         var jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
-                .setRequireSubject()
                 .setVerificationKey(jwsPublicKey)
+                .setExpectedAudience(false)
                 .setJwsAlgorithmConstraints(
                         AlgorithmConstraints.ConstraintType.PERMIT,
                         Arrays.stream(SignatureAlgorithm.values()).map(Enum::name)
@@ -49,6 +49,6 @@ public class BitbucketJoseJwtService implements JwtService {
                 .build();
 
         var jwtClaims = jwtConsumer.processToClaims(jwt);
-        return mapper.mapTo(jwtClaims.getClaimsMap());
+        return mapper.fromJson(jwtClaims.getRawJson(), new TypeReference<JwtClaims>() {});
     }
 }
