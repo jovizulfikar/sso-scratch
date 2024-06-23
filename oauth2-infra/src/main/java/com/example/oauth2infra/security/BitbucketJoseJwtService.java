@@ -1,5 +1,6 @@
 package com.example.oauth2infra.security;
 
+import com.example.oauth2core.application.config.AppConfig;
 import com.example.oauth2core.domain.jose.JsonWebSignature;
 import com.example.oauth2core.domain.jose.SignatureAlgorithm;
 import com.example.oauth2core.domain.oauth2.JwtClaims;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 public class BitbucketJoseJwtService implements JwtService {
 
     private final MapperUtil mapper;
+    private final AppConfig appConfig;
 
     @Override
     @SneakyThrows
@@ -41,7 +43,7 @@ public class BitbucketJoseJwtService implements JwtService {
         var jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
                 .setVerificationKey(jwsPublicKey)
-                .setExpectedAudience(false)
+                .setExpectedAudience(appConfig.getUris().toArray(new String[0]))
                 .setJwsAlgorithmConstraints(
                         AlgorithmConstraints.ConstraintType.PERMIT,
                         Arrays.stream(SignatureAlgorithm.values()).map(Enum::name)
