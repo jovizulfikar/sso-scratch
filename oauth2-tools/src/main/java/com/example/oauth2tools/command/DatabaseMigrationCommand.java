@@ -42,8 +42,4 @@ public class DatabaseMigrationCommand {
                 .execute();
     }
 
-    @ShellMethod(key = "migrate:make", value = "Make database migration")
-    public String make() {
-        return "Hellow";
-    }
 }
