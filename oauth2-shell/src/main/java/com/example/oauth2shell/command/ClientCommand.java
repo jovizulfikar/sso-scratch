@@ -1,23 +1,23 @@
 package com.example.oauth2shell.command;
 
+import com.example.oauth2core.application.usecase.RegisterClientUseCase;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import com.example.oauth2core.application.usecase.RegisterClientUseCase;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-
 @ShellComponent
+@ShellCommandGroup("Client")
 @RequiredArgsConstructor
-public class RegisterClientCommand {
-    
+public class ClientCommand {
+
     private final RegisterClientUseCase registerClientUseCase;
     private final ObjectMapper objectMapper;
 
-    @ShellMethod(key = "register-client", value = "Register OAuth2 Client")
+    @ShellMethod(key = "client:register", value = "Register OAuth2 Client")
     @SneakyThrows
     public String registerClient(
         @ShellOption("--client-id") String clientId, 
@@ -31,4 +31,5 @@ public class RegisterClientCommand {
         var result = registerClientUseCase.registerClient(command);
         return objectMapper.writeValueAsString(result);
     }
+    
 }
