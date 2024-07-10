@@ -3,9 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/oauth2scratch
     username: jovizulfikar
     password: postgres
-  jpa:
-    hibernate:
-      ddl-auto: update
 
 logging:
   level:

@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/oauth2scratch
+    username: jovizulfikar
+    password: postgres
+  shell:
+    interactive:
+      enabled: true
+  jpa:
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: update
+              create-target: oauth2-tools/src/main/resources/db/diff.sql
+  liquibase:
+    enabled: false
+    change-log: db/changelog.yaml

@@ -1,0 +1,87 @@
+databaseChangeLog:
+  - changeSet:
+      id: "20240707120627"
+      author: "jovizulfikar"
+      changes:
+        - tagDatabase:
+            tag: "20240707120627"
+
+  - changeSet:
+      id: "20240707120628"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240707120628_create_clients_table.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240707120628_rollback_create_clients_table.sql"
+
+  - changeSet:
+      id: "20240710144928"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710144928_create_users_table.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710144928_rollback_create_users_table.sql"
+
+  - changeSet:
+      id: "20240710151800"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710151800_create_api_scopes_table.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710151800_rollback_create_api_scopes_table.sql"
+
+  - changeSet:
+      id: "20240710152000"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710152000_create_client_api_scope.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710152000_rollback_create_client_api_scope.sql"
+
+  - changeSet:
+      id: "20240710152300"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710152300_create_client_audience_uris.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710152300_rollback_create_client_audience_uris.sql"
+  
+  - changeSet:
+      id: "20240710152500"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710152500_create_client_grant_types.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710152500_rollback_create_client_grant_types.sql"
+
+  - changeSet:
+      id: "20240710154500"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710154500_create_client_secrets_table.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710154500_rollback_create_client_secrets_table.sql"
+
+  - changeSet:
+      id: "20240710154900"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240710154900_create_table_refresh_tokens.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240710154900_rollback_create_table_refresh_tokens.sql"
