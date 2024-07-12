@@ -40,4 +40,5 @@ public interface MapperUtil {
     JpaRefreshToken jpaRefreshToken(RefreshToken refreshToken);
     ApiScope apiScope(JpaApiScope jpaApiScope);
     JpaApiScope jpaApiScope(ApiScope apiScope);
+    RefreshToken refreshToken(JpaRefreshToken jpaRefreshToken);
 }

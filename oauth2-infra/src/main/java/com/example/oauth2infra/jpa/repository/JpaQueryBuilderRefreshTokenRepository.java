@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,6 +38,36 @@ public class JpaQueryBuilderRefreshTokenRepository implements RefreshTokenReposi
         }
 
         return refreshToken;
+    }
+
+    @Override
+    public Optional<RefreshToken> findByValueAndClientId(String value, String clientId) {
+        var criteriaBuilder = entityManager.getCriteriaBuilder();
+        var criteriaQuery = criteriaBuilder.createQuery(JpaRefreshToken.class);
+        var root = criteriaQuery.from(JpaRefreshToken.class);
+
+        criteriaQuery.select(root)
+            .where(criteriaBuilder.and(
+                criteriaBuilder.equal(root.get("value"), value),
+                criteriaBuilder.equal(root.get("clientId"), clientId)
+            ));
+
+        return entityManager.createQuery(criteriaQuery)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .map(mapper::refreshToken);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByValue(String value) {
+        var criteriaBuilder = entityManager.getCriteriaBuilder();
+        var criteriaDelete = criteriaBuilder.createCriteriaDelete(JpaRefreshToken.class);
+        var root = criteriaDelete.from(JpaRefreshToken.class);
+
+        criteriaDelete.where(criteriaBuilder.equal(root.get("value"), value));
+        entityManager.createQuery(criteriaDelete).executeUpdate();
     }
 
 

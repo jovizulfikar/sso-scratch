@@ -87,6 +87,12 @@ public class ExceptionTranslator {
                 pd.setTitle("Forbidden");
                 pd.setDetail("The provided JWT token does not have the required scope to access this resource.");
                 yield pd;
+            } case AuthenticationProvider.ERROR_INVALID_REFRESH_TOKEN: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/authentication/invalid-refresh-token"));
+                pd.setTitle("Invalid Refresh Token");
+                pd.setDetail("Refresh token is invalid or has expired.");
+                yield pd;
             }
             default: yield ExceptionTranslator.defaultProblemDetail();
         };

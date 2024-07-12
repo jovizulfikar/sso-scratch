@@ -8,6 +8,7 @@ import com.example.oauth2core.application.usecase.RegisterClientUseCase;
 import com.example.oauth2core.application.usecase.RegisterUserUseCase;
 import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2core.application.usecase.authentication.provider.ClientCredentials;
+import com.example.oauth2core.application.usecase.authentication.provider.RefreshToken;
 import com.example.oauth2core.application.usecase.authentication.provider.ResourceOwnerPasswordCredentials;
 import com.example.oauth2infra.config.OAuth2Config;
 import com.example.oauth2infra.jpa.repository.JpaQueryBuilderApiScopeRepository;
@@ -81,8 +82,13 @@ public class ServiceContainer {
     }
 
     @Bean
+    public RefreshToken refreshToken() {
+        return new RefreshToken(jpaQueryBuilderClientRepository, bcryptHash, jpaQueryBuilderRefreshTokenRepository, jwsService(), bitbucketJoseJwtService, refreshTokenService());
+    }
+
+    @Bean
     public AuthenticationProviderFactory authenticationProviderFactory() {
-        return new AuthenticationProviderFactory(resourceOwnerPasswordCredentials(), clientCredentials());
+        return new AuthenticationProviderFactory(resourceOwnerPasswordCredentials(), clientCredentials(), refreshToken());
     }
 
     @Bean
