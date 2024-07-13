@@ -5,4 +5,5 @@ public interface OAuth2Config {
     String getPrivateKey();
     String getPublicKey();
     String getKeyId();
+    String getJwksUri();
 }

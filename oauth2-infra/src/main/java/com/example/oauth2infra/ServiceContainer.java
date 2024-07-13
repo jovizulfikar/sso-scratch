@@ -4,6 +4,7 @@ import com.example.oauth2core.application.service.JwsService;
 import com.example.oauth2core.application.service.KeyManager;
 import com.example.oauth2core.application.service.RefreshTokenService;
 import com.example.oauth2core.application.usecase.CreateApiScopeUseCase;
+import com.example.oauth2core.application.usecase.GetJwksUseCase;
 import com.example.oauth2core.application.usecase.RegisterClientUseCase;
 import com.example.oauth2core.application.usecase.RegisterUserUseCase;
 import com.example.oauth2core.application.usecase.authentication.provider.AuthenticationProviderFactory;
@@ -99,5 +100,10 @@ public class ServiceContainer {
     @Bean
     public CreateApiScopeUseCase createApiScopeUseCase() {
         return new CreateApiScopeUseCase(jpaApiScopeRepository);
+    }
+
+    @Bean
+    public GetJwksUseCase getJwksUseCase() {
+        return new GetJwksUseCase(keyManager(), oAuth2Config);
     }
 }

@@ -14,4 +14,5 @@ public class OAuth2Config implements com.example.oauth2core.application.config.O
     private String privateKey;
     private String publicKey;
     private String keyId;
+    private String jwksUri;
 }

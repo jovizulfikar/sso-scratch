@@ -1,5 +1,6 @@
 package com.example.oauth2core.application.service;
 
+import com.example.oauth2core.application.config.OAuth2Config;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -13,9 +14,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Objects;
-
-import com.example.oauth2core.application.config.OAuth2Config;
-
 
 @RequiredArgsConstructor
 public class KeyManager {
@@ -47,5 +45,20 @@ public class KeyManager {
 
     public RSAPrivateKey getRsaPrivateKey() {
         return (RSAPrivateKey) getKeyPair().getPrivate();
+    }
+
+    public byte[] getPublicKeyMagnitude() {
+        var bigInteger = getRsaPublicKey().getModulus();
+        byte[] twosComplementBytes = bigInteger.toByteArray();
+        byte[] magnitude;
+
+        if ((bigInteger.bitLength() % 8 == 0) && (twosComplementBytes[0] == 0) && twosComplementBytes.length > 1) {
+            magnitude = new byte[twosComplementBytes.length - 1];
+            System.arraycopy(twosComplementBytes, 1, magnitude, 0, twosComplementBytes.length - 1);
+        } else {
+            magnitude = twosComplementBytes;
+        }
+
+        return magnitude;
     }
 }
