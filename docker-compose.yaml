@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: oauth2scratch-db
+    environment:
+      POSTGRES_DB: oauth2scratch
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - oauth2scratch:/var/lib/postgresql/data
+    ports:
+      - 6432:5432
+
+volumes:
+  oauth2scratch:

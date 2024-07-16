@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/oauth2scratch
-    username: jovizulfikar
+    url: jdbc:postgresql://localhost:6432/oauth2scratch
+    username: postgres
     password: postgres
   shell:
     interactive:
