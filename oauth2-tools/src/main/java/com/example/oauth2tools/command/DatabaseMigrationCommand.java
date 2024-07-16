@@ -24,8 +24,9 @@ public class DatabaseMigrationCommand {
     public void migrate() {
         new CommandScope("update")
                 .addArgumentValue("url", environment.getProperty("spring.datasource.url"))
+                .addArgumentValue("username", environment.getProperty("spring.datasource.username"))
+                .addArgumentValue("password", environment.getProperty("spring.datasource.password"))
                 .addArgumentValue("changeLogFile",  environment.getProperty("spring.liquibase.change-log"))
-                .addArgumentValue("tag", "123")
                 .execute();
     }
 
@@ -37,6 +38,8 @@ public class DatabaseMigrationCommand {
 
         new CommandScope("rollback")
                 .addArgumentValue("url", environment.getProperty("spring.datasource.url"))
+                .addArgumentValue("username", environment.getProperty("spring.datasource.username"))
+                .addArgumentValue("password", environment.getProperty("spring.datasource.password"))
                 .addArgumentValue("changeLogFile",  environment.getProperty("spring.liquibase.change-log"))
                 .addArgumentValue("tag", tag)
                 .execute();
