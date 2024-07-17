@@ -36,3 +36,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootBuildImage {
+	builder = "bellsoft/buildpacks.builder:musl"
+}
