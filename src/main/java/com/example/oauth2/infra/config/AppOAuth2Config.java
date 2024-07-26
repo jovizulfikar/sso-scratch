@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("oauth2")
 @Setter
 @Getter
-public class OAuth2Config implements com.example.oauth2.core.application.config.OAuth2Config {
+public class AppOAuth2Config implements com.example.oauth2.core.application.config.OAuth2Config {
     private String issuer;
     private String privateKey;
     private String publicKey;

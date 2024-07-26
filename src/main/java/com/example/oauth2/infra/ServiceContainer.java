@@ -1,5 +1,6 @@
 package com.example.oauth2.infra;
 
+import com.example.oauth2.core.application.config.OAuth2Config;
 import com.example.oauth2.core.application.service.JwsService;
 import com.example.oauth2.core.application.service.KeyManager;
 import com.example.oauth2.core.application.service.RefreshTokenService;
@@ -11,7 +12,15 @@ import com.example.oauth2.core.application.usecase.authentication.provider.Authe
 import com.example.oauth2.core.application.usecase.authentication.provider.ClientCredentials;
 import com.example.oauth2.core.application.usecase.authentication.provider.RefreshToken;
 import com.example.oauth2.core.application.usecase.authentication.provider.ResourceOwnerPasswordCredentials;
-import com.example.oauth2.infra.config.OAuth2Config;
+import com.example.oauth2.core.port.repository.ApiScopeRepository;
+import com.example.oauth2.core.port.repository.ClientRepository;
+import com.example.oauth2.core.port.repository.RefreshTokenRepository;
+import com.example.oauth2.core.port.repository.UserRepository;
+import com.example.oauth2.core.port.security.Hashing;
+import com.example.oauth2.core.port.security.JwtService;
+import com.example.oauth2.core.port.util.IdGenerator;
+import com.example.oauth2.core.port.util.PasswordGenerator;
+import com.example.oauth2.infra.config.AppOAuth2Config;
 import com.example.oauth2.infra.jpa.repository.JpaQueryBuilderApiScopeRepository;
 import com.example.oauth2.infra.jpa.repository.JpaQueryBuilderClientRepository;
 import com.example.oauth2.infra.jpa.repository.JpaQueryBuilderRefreshTokenRepository;
@@ -33,19 +42,59 @@ import org.springframework.context.annotation.Scope;
 @RequiredArgsConstructor
 public class ServiceContainer {
 
-    private final OAuth2Config oAuth2Config;
-    private final NanoIdGenerator nanoIdGenerator;
-    private final BcryptHash bcryptHash;
-    private final PassayPasswordGenerator passayPasswordGenerator;
-    private final BitbucketJoseJwtService bitbucketJoseJwtService;
-    private final JpaQueryBuilderClientRepository jpaQueryBuilderClientRepository;
-    private final JpaQueryBuilderUserRepository jpaQueryBuilderUserRepository;
-    private final JpaQueryBuilderRefreshTokenRepository jpaQueryBuilderRefreshTokenRepository;
-    private final JpaQueryBuilderApiScopeRepository jpaApiScopeRepository;
+    @Bean
+    public OAuth2Config oAuth2Config(AppOAuth2Config appOAuth2Config) {
+        return  appOAuth2Config;
+    }
+
+    @Bean
+    public ApiScopeRepository apiScopeRepository(JpaQueryBuilderApiScopeRepository jpaApiScopeRepository) {
+        return jpaApiScopeRepository;
+    }
+
+    @Bean
+    public RefreshTokenRepository refreshTokenRepository(JpaQueryBuilderRefreshTokenRepository jpaQueryBuilderRefreshTokenRepository) {
+        return jpaQueryBuilderRefreshTokenRepository;
+    }
+
+    @Bean
+    public UserRepository userRepository(JpaQueryBuilderUserRepository jpaQueryBuilderUserRepository) {
+        return jpaQueryBuilderUserRepository;
+    }
+
+    @Bean
+    public ClientRepository clientRepository(JpaQueryBuilderClientRepository jpaQueryBuilderClientRepository) {
+        return jpaQueryBuilderClientRepository;
+    }
+
+    @Bean
+    public JwtService jwtService(BitbucketJoseJwtService bitbucketJoseJwtService) {
+        return bitbucketJoseJwtService;
+    }
+
+    @Bean
+    public PasswordGenerator passwordGenerator(PassayPasswordGenerator passayPasswordGenerator) {
+        return passayPasswordGenerator;
+    }
+
+    @Bean
+    public IdGenerator idGenerator(NanoIdGenerator nanoIdGenerator) {
+        return nanoIdGenerator;
+    }
+
+    @Bean
+    public Hashing hashing(BcryptHash bcryptHash) {
+        return bcryptHash;
+    }
     
     @Bean
-    public RegisterClientUseCase registerClientUseCase() {
-        return new RegisterClientUseCase(jpaQueryBuilderClientRepository, nanoIdGenerator, bcryptHash, passayPasswordGenerator);
+    public RegisterClientUseCase registerClientUseCase(
+            ClientRepository clientRepository,
+            IdGenerator idGenerator,
+            Hashing hashing,
+            PasswordGenerator passwordGenerator
+    ) {
+        return new RegisterClientUseCase(clientRepository, idGenerator, hashing, passwordGenerator);
     }
 
     @Bean
@@ -57,53 +106,77 @@ public class ServiceContainer {
     }
 
     @Bean
-    public RegisterUserUseCase registerUserUseCase() {
-        return new RegisterUserUseCase(jpaQueryBuilderUserRepository, bcryptHash);
+    public RegisterUserUseCase registerUserUseCase(UserRepository userRepository, Hashing hashing) {
+        return new RegisterUserUseCase(userRepository, hashing);
     }
 
     @Bean
-    public ClientCredentials clientCredentials() {
-        return new ClientCredentials(jpaQueryBuilderClientRepository, bcryptHash, jwsService(), bitbucketJoseJwtService, refreshTokenService());
+    public ClientCredentials clientCredentials(
+            ClientRepository clientRepository,
+            Hashing hashing,
+            JwsService jwsService,
+            JwtService jwtService,
+            RefreshTokenService refreshTokenService
+    ) {
+        return new ClientCredentials(clientRepository, hashing, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public KeyManager keyManager() {
+    public KeyManager keyManager(OAuth2Config oAuth2Config) {
         return new KeyManager(oAuth2Config);
     }
 
     @Bean
-    public JwsService jwsService() {
-        return new JwsService(oAuth2Config, nanoIdGenerator, keyManager());
+    public JwsService jwsService(OAuth2Config oAuth2Config, IdGenerator idGenerator, KeyManager keyManager) {
+        return new JwsService(oAuth2Config, idGenerator, keyManager);
     }
 
     @Bean
-    public RefreshTokenService refreshTokenService() {
-        return new RefreshTokenService(nanoIdGenerator, jpaQueryBuilderRefreshTokenRepository);
+    public RefreshTokenService refreshTokenService(IdGenerator idGenerator, RefreshTokenRepository refreshTokenRepository) {
+        return new RefreshTokenService(idGenerator, refreshTokenRepository);
     }
 
     @Bean
-    public RefreshToken refreshToken() {
-        return new RefreshToken(jpaQueryBuilderClientRepository, bcryptHash, jpaQueryBuilderRefreshTokenRepository, jwsService(), bitbucketJoseJwtService, refreshTokenService());
+    public RefreshToken refreshToken(
+            ClientRepository clientRepository,
+            Hashing hashing,
+            RefreshTokenRepository refreshTokenRepository,
+            JwsService jwsService,
+            JwtService jwtService,
+            RefreshTokenService refreshTokenService
+    ) {
+        return new RefreshToken(clientRepository, hashing, refreshTokenRepository, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
-    public AuthenticationProviderFactory authenticationProviderFactory() {
-        return new AuthenticationProviderFactory(resourceOwnerPasswordCredentials(), clientCredentials(), refreshToken());
+    public AuthenticationProviderFactory authenticationProviderFactory(
+            ResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials,
+            ClientCredentials clientCredentials,
+            RefreshToken refreshToken
+    ) {
+        return new AuthenticationProviderFactory(resourceOwnerPasswordCredentials, clientCredentials, refreshToken);
     }
 
     @Bean
-    public ResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials() {
-        return new ResourceOwnerPasswordCredentials(jpaQueryBuilderClientRepository, jpaQueryBuilderUserRepository, bcryptHash, jwsService(), bitbucketJoseJwtService, refreshTokenService());
+    public ResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials(
+            ClientRepository clientRepository,
+            UserRepository userRepository,
+            Hashing hashing,
+            JwsService jwsService,
+            JwtService jwtService,
+            RefreshTokenService refreshTokenService
+    ) {
+        return new ResourceOwnerPasswordCredentials(clientRepository, userRepository, hashing, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
-    public CreateApiScopeUseCase createApiScopeUseCase() {
-        return new CreateApiScopeUseCase(jpaApiScopeRepository);
+    public CreateApiScopeUseCase createApiScopeUseCase(ApiScopeRepository apiScopeRepository) {
+        return new CreateApiScopeUseCase(apiScopeRepository);
     }
 
     @Bean
-    public GetJwksUseCase getJwksUseCase() {
-        return new GetJwksUseCase(keyManager(), oAuth2Config);
+    public GetJwksUseCase getJwksUseCase(KeyManager keyManager, OAuth2Config oAuth2Config) {
+        return new GetJwksUseCase(keyManager, oAuth2Config);
     }
 }
