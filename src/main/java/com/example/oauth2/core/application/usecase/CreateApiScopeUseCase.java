@@ -15,19 +15,19 @@ public class CreateApiScopeUseCase {
 
     @Builder
     @Getter
-    public static class Command {
+    public static class Request {
         private String name;
     }
 
-    public void createApiScope(Command command) {
-        var apiScope = apiScopeRepository.findByName(command.name).orElse(null);
+    public void createApiScope(Request request) {
+        var apiScope = apiScopeRepository.findByName(request.name).orElse(null);
 
         if (Objects.nonNull(apiScope)) {
             return;
         }
 
         apiScope = ApiScope.builder()
-                .name(command.name)
+                .name(request.name)
                 .build();
         
         apiScopeRepository.save(apiScope);

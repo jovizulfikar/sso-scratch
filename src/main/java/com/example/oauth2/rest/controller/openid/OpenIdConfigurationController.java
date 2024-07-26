@@ -1,4 +1,4 @@
-package com.example.oauth2.rest.controller;
+package com.example.oauth2.rest.controller.openid;
 
 import com.example.oauth2.core.application.usecase.GetJwksUseCase;
 import com.example.oauth2.core.domain.jose.JsonWebKeySet;

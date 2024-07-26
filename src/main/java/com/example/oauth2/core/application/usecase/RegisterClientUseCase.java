@@ -26,14 +26,14 @@ public class RegisterClientUseCase {
 
     @Builder
     @Getter
-    public static class Command {
+    public static class Request {
         private String clientId;
         private String clientName;
     }
 
     @Builder
     @Getter
-    public static class Result {
+    public static class Response {
         private String clientId;
         private String clientName;
         private Long clientIssuedAt;
@@ -41,10 +41,10 @@ public class RegisterClientUseCase {
         private Long clientSecretExpiresAt;
     }
 
-    public Result registerClient(Command command) {
+    public Response registerClient(Request request) {
         var password = passwordGenerator.generate(32);
 
-        var clientId = command.clientId + "-" + idGenerator.generate(6).toLowerCase();
+        var clientId = request.clientId + "-" + idGenerator.generate(6).toLowerCase();
 
         var clientSecret = ClientSecret.builder()
             .secret(passwordHash.hash(password))
@@ -53,7 +53,7 @@ public class RegisterClientUseCase {
 
         var client = Client.builder()
             .clientId(clientId)
-            .name(command.clientName)
+            .name(request.clientName)
             .grantTypes(new HashSet<>(Collections.singletonList(AuthorizationGrantType.CLIENT_CREDENTIALS.getGranType())))
             .secrets(new HashSet<>(Collections.singletonList(clientSecret)))
             .issuedAt(LocalDateTime.now())
@@ -61,7 +61,7 @@ public class RegisterClientUseCase {
 
         clientRepository.save(client);
 
-        return Result.builder()
+        return Response.builder()
             .clientId(client.getClientId())
             .clientName(client.getName())
             .clientSecret(password)

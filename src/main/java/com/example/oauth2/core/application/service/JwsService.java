@@ -40,7 +40,7 @@ public class JwsService {
                 .scope(scopes)
                 .build();
 
-         return JsonWebSignature.builder()
+        return JsonWebSignature.builder()
                 .claims(claims)
                 .key(rsaPrivateKey)
                 .algorithm(SignatureAlgorithm.RS256)

@@ -35,51 +35,51 @@ public class RegisterUserUseCase {
 
     @Setter
     @Getter
-    public static class Command {
+    public static class Request {
         private String username;
         private String password;
     }
 
     @Builder
     @Getter
-    public static class Result {
+    public static class Response {
         private String userId;
     }
 
     @SneakyThrows
-    public Result registerUser(Command command) {
-        validate(command);
+    public Response registerUser(Request request) {
+        validate(request);
 
-        var user = userRepository.findByUsername(command.username).orElse(null);
+        var user = userRepository.findByUsername(request.username).orElse(null);
         if (Objects.nonNull(user)) {
             throw AppException.build(ERROR_USERNAME_ALREADY_TAKEN)
-                .put("username", command.getUsername());
+                .put("username", request.getUsername());
         }
 
         user = User.builder()
-            .username(command.username)
-            .password(passwordHash.hash(command.password))
+            .username(request.username)
+            .password(passwordHash.hash(request.password))
             .build();
     
         userRepository.save(user);
 
-        return Result.builder()
+        return Response.builder()
             .userId(user.getId())
             .build();
     }
 
     @SneakyThrows
-    private void validate(Command command) {
+    private void validate(Request request) {
         var usernameErrors = Validator.build()
             .addConstraint(new NotNull(ERROR_USERNAME_VALIDATION_NOT_NULL))
             .addConstraint(new MinLength(3, ERROR_USERNAME_VALIDATION_MIN_LENGTH))
-            .validate(command.getUsername())
+            .validate(request.getUsername())
             .values();
 
         var passowrdErrors = Validator.build()
             .addConstraint(new NotNull(ERROR_PASSWORD_VALIDATION_NOT_NULL))
             .addConstraint(new MinLength(8, ERROR_PASSWORD_VALIDATION_MIN_LENGTH))
-            .validate(command.getPassword())
+            .validate(request.getPassword())
             .values();
 
         if (usernameErrors.isEmpty() && passowrdErrors.isEmpty()) {

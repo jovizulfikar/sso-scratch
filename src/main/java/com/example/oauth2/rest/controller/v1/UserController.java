@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping
     @ApiScope("oauth2.register-user")
-    public ResponseEntity<RegisterUserUseCase.Result> postMethodName(@RequestBody RegisterUserUseCase.Command request) {
+    public ResponseEntity<RegisterUserUseCase.Response> postMethodName(@RequestBody RegisterUserUseCase.Request request) {
         var response = registerUserUseCase.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
