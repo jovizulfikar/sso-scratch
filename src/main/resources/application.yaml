@@ -1,6 +1,12 @@
 spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   web:
-    resources: 
+    resources:
       add-mappings: false
   jpa:
     properties:
@@ -9,11 +15,14 @@ spring:
           schema-generation:
             create-source: metadata
             scripts:
-              action: update
+              action: none
               create-target: src/main/resources/db/diff.sql
   liquibase:
     enabled: false
     change-log: db/changelog.yaml
+  docker:
+    compose:
+      enabled: false
 
 logging:
   level:
@@ -23,13 +32,12 @@ logging:
       springframework: INFO
 
 oauth2:
-  issuer: sandbox
-  jwks-uri: http://localhost:8080/.well-known/openid-configuration/jwks
-  key-id: 92qlFC
-  private-key: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCEnTOItCrBfwy2Xs44rXv25kUfJ/k3AgxgzSP1JYLuJgsBY1Q6dzQhEtn4Y02CnKwF7frMWHDp7RtFqblzooTQ2YWZekMLEBTskN+5y8co5kOj3dUISm0lX8af3Rj11s47Djbli7PJfJbPZjcdS89DGGmFuG7/F1EK+vflQaq+BDTBQJfiGR2ocGjqQUKDRay2w9rjh/Npsv5SusXS6/HhtsuZeFok5sRL0Mojhpf7hxJI2wcy1L3D5e//AIlSnOTkzVkNg8dfIo87Ki6Pqc3vsz09s3+SsSqRK49jy6RC1JpcWqEl1NYyY7L4SQ8RJHeHA0g9OBW1ObnySQuj/X51AgMBAAECggEACYYrvRHpby+jd1aMO3xUJpmHldL+XkG+p1YcUr8grd9cE3uxgSht/UEYF/NzzeFYJm3ewP3KEDbX6lMj70bZAJHauzjRZ1I+mnXWJ4cX1NtiuLpWEiwcNh6wimsr334PniSpcydrIFmbECagZzF6X3B5paGnERl418/J7XRfoZlbxESnzQZKIE7ttZYWFTUqhpahhpXXLffm6QGWoebjtWF0tqaho3ZbY1K2wlGa0XiduQ22od4awWiv/g0ICekpSV+kxz4rxXMb0O63M4xWunBlkFh6fuKPNv5cXORVd6JUGal/f9AexugaddKOyDsfOa14iP4T77DWSkkaLCKlIQKBgQC3iSHdFGgva82fbk+dOShAw6HUnddg1PrhK81G6aQYmb+mztGP9CBV6IGd+jVKKfGAmWHdIOIxlqlAg5gIAiDJxkRTi7YpXJYz5qDfesuBUsnwjsQBLP+PBsU/L+MfeEBwy/Uv2Q77Q6fPyomPIXg/4RooQPp0UaZQwt5NwotL4QKBgQC4+Sr6L2lRaWHbqcdSMV4XnirQ3PSdFq36DF80O/42WtfnuC5T1TW4olCDod3lBMhKcF7strx2sSLGJlPRh3ZQ9qTcZPc2EGybErIRIW4lTRLac4Md48DN3LAE/rDKTa7sTs9ppCTULFLQL+HCfmymxxdpr4tz54LSrnbVCbDlFQKBgH3C9rRRpm5QFU7YvK8EGmP+aWaSXaHZbqtaY0fjEvFUcPGxKAHXC00yi5afe2J9SSGQeHGYdcX68bDmOwfJxYPdWrZQtpqy+a1IrBVWRBoyi3NNsFsJ5Xew8PmyK5RFxwpDh5eoyU489sE4jHfKPGaxLUZF+Bg6VpdiYAeyddahAoGAXmPwFXlKMhwnrrNlnkDI9h5lVO3b+amQIDBeCMawg8Y5tOpc4bTEVDKoCXP5Spv1JV9QYVUiuSLNTvZSAXMx4kDqgfkX2cPp1/xjV7CKh4hcHZOijgch5Ss/u1zIlIOtxrK0zwDPNmJj5A77Eof3I+gmv2ywKfYy4RXcV/w5A70CgYB/z34npQFt8BnG83hE1Tj5uQjnlDSPI+i7K0s/Zq2U3nmuTsX4jlKey2O0HoZcsTYZhDcitYqGsnD9ifP9G7TAV/6sXerVICYDgq+YhSGvy8GtZx3D41umLqi7bbY4p51MiHFNtcJpwBseqHos0YrpOU+qfwHivern9AtH4hCmPA==
-  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhJ0ziLQqwX8Mtl7OOK179uZFHyf5NwIMYM0j9SWC7iYLAWNUOnc0IRLZ+GNNgpysBe36zFhw6e0bRam5c6KE0NmFmXpDCxAU7JDfucvHKOZDo93VCEptJV/Gn90Y9dbOOw425YuzyXyWz2Y3HUvPQxhphbhu/xdRCvr35UGqvgQ0wUCX4hkdqHBo6kFCg0WstsPa44fzabL+UrrF0uvx4bbLmXhaJObES9DKI4aX+4cSSNsHMtS9w+Xv/wCJUpzk5M1ZDYPHXyKPOyouj6nN77M9PbN/krEqkSuPY8ukQtSaXFqhJdTWMmOy+EkPESR3hwNIPTgVtTm58kkLo/1+dQIDAQAB
-  
+  issuer: ${OAUTH2_ISSUER}
+  jwks-uri: ${OAUTH2_JWKS_URI}
+  key-id: ${OAUTH2_KEY_ID}
+  private-key: ${OAUTH2_PRIVATE_KEY}
+  public-key: ${OAUTH2_PUBLIC_KEY}
+
 app:
-  uris:
-    - oauth2scratch.example.com
+  uris: ${APP_URIS:.split(",")}
 
