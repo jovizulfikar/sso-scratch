@@ -1,7 +1,7 @@
 package com.example.oauth2.rest.controller;
 
-import com.example.oauth2.core.application.usecase.RegisterClientUseCase;
-import com.example.oauth2.core.application.usecase.RegisterUserUseCase;
+import com.example.oauth2.core.application.usecase.client.RegisterClientUseCase;
+import com.example.oauth2.core.application.usecase.user.RegisterUserUseCase;
 import com.example.oauth2.core.application.usecase.authentication.provider.AuthenticationProvider;
 import com.example.oauth2.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2.core.common.exception.AppException;

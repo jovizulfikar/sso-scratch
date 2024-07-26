@@ -1,4 +1,4 @@
-package com.example.oauth2.core.application.usecase;
+package com.example.oauth2.core.application.usecase.oidc;
 
 import com.example.oauth2.core.application.config.OAuth2Config;
 import com.example.oauth2.core.application.service.KeyManager;

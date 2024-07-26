@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.oauth2.core.application.usecase.RegisterUserUseCase;
+import com.example.oauth2.core.application.usecase.user.RegisterUserUseCase;
 import lombok.RequiredArgsConstructor;
 
 @RestController

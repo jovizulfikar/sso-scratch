@@ -1,4 +1,4 @@
-package com.example.oauth2.core.application.usecase;
+package com.example.oauth2.core.application.usecase.user;
 
 import java.util.HashMap;
 import java.util.HashSet;

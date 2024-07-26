@@ -1,4 +1,4 @@
-package com.example.oauth2.core.application.usecase;
+package com.example.oauth2.core.application.usecase.client;
 
 import com.example.oauth2.core.application.validation.Validator;
 import com.example.oauth2.core.application.validation.constraint.NotNull;

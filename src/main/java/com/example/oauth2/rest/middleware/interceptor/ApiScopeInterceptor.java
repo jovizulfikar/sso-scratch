@@ -27,11 +27,10 @@ public class ApiScopeInterceptor implements HandlerInterceptor {
         @NonNull Object handler
     ) throws Exception {
 
-        if (!(handler instanceof HandlerMethod)) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
 
-        var handlerMethod = (HandlerMethod) handler;
         var apiScopeAnnotation = handlerMethod.getMethod().getAnnotation(ApiScope.class);
 
         if (Objects.isNull(apiScopeAnnotation)) {
@@ -46,10 +45,7 @@ public class ApiScopeInterceptor implements HandlerInterceptor {
 
         var scopeClaim = (JwtClaims) request.getAttribute("jwtClaims");
         boolean isEligible = scopeClaim.getScope().stream()
-                .filter(scope -> Arrays.stream(apiScopes)
-                        .anyMatch(apiScope -> apiScope.equals(scope)))
-                .findFirst()
-                .isPresent();
+                .anyMatch(scope -> Arrays.asList(apiScopes).contains(scope));
 
         if (!isEligible) {
             throw AppException.build(ERROR_INVALID_SCOPE);

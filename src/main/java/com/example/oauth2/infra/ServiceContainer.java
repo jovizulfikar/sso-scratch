@@ -4,10 +4,11 @@ import com.example.oauth2.core.application.config.OAuth2Config;
 import com.example.oauth2.core.application.service.JwsService;
 import com.example.oauth2.core.application.service.KeyManager;
 import com.example.oauth2.core.application.service.RefreshTokenService;
-import com.example.oauth2.core.application.usecase.CreateApiScopeUseCase;
-import com.example.oauth2.core.application.usecase.GetJwksUseCase;
-import com.example.oauth2.core.application.usecase.RegisterClientUseCase;
-import com.example.oauth2.core.application.usecase.RegisterUserUseCase;
+import com.example.oauth2.core.application.usecase.apiscope.CreateApiScopeUseCase;
+import com.example.oauth2.core.application.usecase.oidc.GetJwksUseCase;
+import com.example.oauth2.core.application.usecase.client.RegisterClientUseCase;
+import com.example.oauth2.core.application.usecase.oidc.GetOpenidConfigurationUseCase;
+import com.example.oauth2.core.application.usecase.user.RegisterUserUseCase;
 import com.example.oauth2.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2.core.application.usecase.authentication.provider.ClientCredentials;
 import com.example.oauth2.core.application.usecase.authentication.provider.RefreshToken;
@@ -178,5 +179,10 @@ public class ServiceContainer {
     @Bean
     public GetJwksUseCase getJwksUseCase(KeyManager keyManager, OAuth2Config oAuth2Config) {
         return new GetJwksUseCase(keyManager, oAuth2Config);
+    }
+
+    @Bean
+    public GetOpenidConfigurationUseCase getOpenidConfigurationUseCase(OAuth2Config oAuth2Config) {
+        return new GetOpenidConfigurationUseCase(oAuth2Config);
     }
 }

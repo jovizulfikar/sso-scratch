@@ -1,4 +1,4 @@
-package com.example.oauth2.core.application.usecase;
+package com.example.oauth2.core.application.usecase.apiscope;
 
 import com.example.oauth2.core.domain.entity.ApiScope;
 import com.example.oauth2.core.port.repository.ApiScopeRepository;

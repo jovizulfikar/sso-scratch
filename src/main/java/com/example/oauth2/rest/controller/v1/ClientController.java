@@ -1,6 +1,6 @@
 package com.example.oauth2.rest.controller.v1;
 
-import com.example.oauth2.core.application.usecase.RegisterClientUseCase;
+import com.example.oauth2.core.application.usecase.client.RegisterClientUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
