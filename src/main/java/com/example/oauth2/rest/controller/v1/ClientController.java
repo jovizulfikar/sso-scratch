@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ public class ClientController {
     private final RegisterClientUseCase registerClientUseCase;
 
     @PostMapping
-    public ResponseEntity<RegisterClientUseCase.Response> postClients(RegisterClientUseCase.Request request) {
+    public ResponseEntity<RegisterClientUseCase.Response> postClients(@RequestBody RegisterClientUseCase.Request request) {
         var response = registerClientUseCase.registerClient(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);

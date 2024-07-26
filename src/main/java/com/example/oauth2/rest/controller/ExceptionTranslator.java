@@ -1,26 +1,25 @@
 package com.example.oauth2.rest.controller;
 
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import com.example.oauth2.rest.middleware.filter.JwtAuthenticationFilter;
-import com.example.oauth2.rest.middleware.interceptor.ApiScopeInterceptor;
-import org.jose4j.jwt.consumer.ErrorCodeValidator;
-import org.jose4j.jwt.consumer.InvalidJwtException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
-
+import com.example.oauth2.core.application.usecase.RegisterClientUseCase;
 import com.example.oauth2.core.application.usecase.RegisterUserUseCase;
 import com.example.oauth2.core.application.usecase.authentication.provider.AuthenticationProvider;
 import com.example.oauth2.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.oauth2.core.common.exception.AppException;
 import com.example.oauth2.core.common.exception.ValidationException;
+import com.example.oauth2.rest.middleware.filter.JwtAuthenticationFilter;
+import com.example.oauth2.rest.middleware.interceptor.ApiScopeInterceptor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.jose4j.jwt.consumer.ErrorCodeValidator;
+import org.jose4j.jwt.consumer.InvalidJwtException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionTranslator {
 
     public static ProblemDetail defaultProblemDetail() {
@@ -108,7 +107,7 @@ public class ExceptionTranslator {
         Map<String, Set<String>> errors = new HashMap<>(e.getErrors());
         for (Map.Entry<String,Set<String>> fieldErrors : errors.entrySet()) {
             fieldErrors.setValue(fieldErrors.getValue().stream()
-                .map(fieldError -> mapValidationError(fieldError))
+                .map(ExceptionTranslator::mapValidationError)
                 .collect(Collectors.toSet()));
         }
 
@@ -127,6 +126,9 @@ public class ExceptionTranslator {
         messages.put(RegisterUserUseCase.ERROR_USERNAME_VALIDATION_MIN_LENGTH, "Username must be at least 3 characters long.");
         messages.put(RegisterUserUseCase.ERROR_PASSWORD_VALIDATION_NOT_NULL, "Password is required.");
         messages.put(RegisterUserUseCase.ERROR_PASSWORD_VALIDATION_MIN_LENGTH, "Password must be at least 8 characters long.");
+
+        messages.put(RegisterClientUseCase.ERROR_CLIENT_ID_VALIDATION_NOT_NULL, "Client ID is required");
+        messages.put(RegisterClientUseCase.ERROR_CLIENT_NAME_VALIDATION_NOT_NULL, "Client Name is required");
 
         var message = messages.get(type);
         return Objects.nonNull(message) ? message : type;

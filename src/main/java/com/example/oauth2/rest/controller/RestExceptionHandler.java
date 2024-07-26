@@ -19,37 +19,39 @@ import java.util.Optional;
 @Slf4j
 public class RestExceptionHandler {
 
+    private static final String ERROR_TAG = "Error: {}";
+
     @ExceptionHandler
     public ResponseEntity<ProblemDetail> handleException(Exception ex) {
-        log.error("Error: {}", ex.getMessage(), ex);
+        log.error(ERROR_TAG, ex.getMessage(), ex);
         ProblemDetail detail = ExceptionTranslator.defaultProblemDetail();
         return ResponseEntity.of(detail).build();
     }
 
     @ExceptionHandler(value = { AppException.class })
     public ResponseEntity<ProblemDetail> handleAppException(AppException ex) {
-        log.error("Error: {}", ex.getMessage(), ex);
+        log.error(ERROR_TAG, ex.getMessage(), ex);
         ProblemDetail detail = ExceptionTranslator.toProblemDetail(ex);
         return ResponseEntity.of(detail).build();
     }
     
     @ExceptionHandler(value = { ValidationException.class })
     public ResponseEntity<ProblemDetail> handleValidationException(ValidationException ex) {
-        log.error("Error: {}", ex.getMessage(), ex);
+        log.error(ERROR_TAG, ex.getMessage(), ex);
         ProblemDetail detail = ExceptionTranslator.toProblemDetail(ex);
         return ResponseEntity.of(detail).build();
     }
 
     @ExceptionHandler(value = { InvalidJwtException.class })
     public ResponseEntity<ProblemDetail> handleInvalidJwtException(InvalidJwtException ex) {
-        log.error("Error: {}", ex.getMessage(), ex);
+        log.error(ERROR_TAG, ex.getMessage(), ex);
         ProblemDetail detail = ExceptionTranslator.toProblemDetail(ex);
         return ResponseEntity.of(detail).build();
     }
 
     @ExceptionHandler(value = { NoHandlerFoundException.class })
     public ResponseEntity<ProblemDetail> handleRouteNotFoundException(NoHandlerFoundException ex, HttpServletRequest request) {
-        log.error("Error: {}", ex.getMessage(), ex);
+        log.error(ERROR_TAG, ex.getMessage(), ex);
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Route " + request.getMethod() + " " +  request.getRequestURI() + " not found.");
         var title = Optional.ofNullable(detail.getTitle()).orElse("");
         detail.setType(URI.create("/errors/" + title.toLowerCase().replace(" ", "-")));
