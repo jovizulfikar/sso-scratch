@@ -12,7 +12,7 @@ spring:
     compose:
       enabled: true
 
-oauth2:
+sso:
   issuer: sandbox
   jwks-uri: http://localhost:8080/.well-known/openid-configuration/jwks
   key-id: 92qlFC
@@ -21,5 +21,5 @@ oauth2:
 
 app:
   uris:
-    - oauth2scratch.example.com
+    - ssoscratch.example.com
 

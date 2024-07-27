@@ -31,12 +31,12 @@ logging:
     org:
       springframework: INFO
 
-oauth2:
-  issuer: ${OAUTH2_ISSUER}
-  jwks-uri: ${OAUTH2_JWKS_URI}
-  key-id: ${OAUTH2_KEY_ID}
-  private-key: ${OAUTH2_PRIVATE_KEY}
-  public-key: ${OAUTH2_PUBLIC_KEY}
+sso:
+  issuer: ${SSO_ISSUER}
+  jwks-uri: ${SSO_JWKS_URI}
+  key-id: ${SSO_KEY_ID}
+  private-key: ${SSO_PRIVATE_KEY}
+  public-key: ${SSO_PUBLIC_KEY}
 
 app:
   uris: ${APP_URIS:.split(",")}
