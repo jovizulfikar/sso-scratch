@@ -17,7 +17,7 @@ import lombok.SneakyThrows;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ResourceOwnerPasswordCredentials implements AuthenticationProvider {
+public class AuthenticateResourceOwnerPasswordCredentials implements AuthenticationProvider {
 
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;

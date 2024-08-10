@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class RefreshToken implements AuthenticationProvider {
+public class AuthenticateRefreshToken implements AuthenticationProvider {
 
     private final ClientRepository clientRepository;
     private final Hashing passwordHash;

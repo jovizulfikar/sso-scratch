@@ -16,7 +16,7 @@ import lombok.SneakyThrows;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ClientCredentials implements AuthenticationProvider {
+public class AuthenticateClientCredentials implements AuthenticationProvider {
 
     private final ClientRepository clientRepository;
     private final Hashing passwordHash;

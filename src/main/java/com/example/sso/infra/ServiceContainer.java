@@ -6,9 +6,9 @@ import com.example.sso.core.application.service.KeyManager;
 import com.example.sso.core.application.service.RefreshTokenService;
 import com.example.sso.core.application.usecase.apiscope.CreateApiScopeUseCase;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
-import com.example.sso.core.application.usecase.authentication.provider.ClientCredentials;
-import com.example.sso.core.application.usecase.authentication.provider.RefreshToken;
-import com.example.sso.core.application.usecase.authentication.provider.ResourceOwnerPasswordCredentials;
+import com.example.sso.core.application.usecase.authentication.provider.AuthenticateClientCredentials;
+import com.example.sso.core.application.usecase.authentication.provider.AuthenticateRefreshToken;
+import com.example.sso.core.application.usecase.authentication.provider.AuthenticateResourceOwnerPasswordCredentials;
 import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
 import com.example.sso.core.application.usecase.oidc.GetJwksUseCase;
 import com.example.sso.core.application.usecase.oidc.GetOpenidConfigurationUseCase;
@@ -122,14 +122,14 @@ public class ServiceContainer {
     }
 
     @Bean
-    public ClientCredentials clientCredentials(
+    public AuthenticateClientCredentials clientCredentials(
             ClientRepository clientRepository,
             Hashing hashing,
             JwsService jwsService,
             JwtService jwtService,
             RefreshTokenService refreshTokenService
     ) {
-        return new ClientCredentials(clientRepository, hashing, jwsService, jwtService, refreshTokenService);
+        return new AuthenticateClientCredentials(clientRepository, hashing, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
@@ -149,7 +149,7 @@ public class ServiceContainer {
     }
 
     @Bean
-    public RefreshToken refreshToken(
+    public AuthenticateRefreshToken refreshToken(
             ClientRepository clientRepository,
             Hashing hashing,
             RefreshTokenRepository refreshTokenRepository,
@@ -157,20 +157,20 @@ public class ServiceContainer {
             JwtService jwtService,
             RefreshTokenService refreshTokenService
     ) {
-        return new RefreshToken(clientRepository, hashing, refreshTokenRepository, jwsService, jwtService, refreshTokenService);
+        return new AuthenticateRefreshToken(clientRepository, hashing, refreshTokenRepository, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
     public AuthenticationProviderFactory authenticationProviderFactory(
-            ResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials,
-            ClientCredentials clientCredentials,
-            RefreshToken refreshToken
+            AuthenticateResourceOwnerPasswordCredentials authenticateResourceOwnerPasswordCredentials,
+            AuthenticateClientCredentials authenticateClientCredentials,
+            AuthenticateRefreshToken authenticateRefreshToken
     ) {
-        return new AuthenticationProviderFactory(resourceOwnerPasswordCredentials, clientCredentials, refreshToken);
+        return new AuthenticationProviderFactory(authenticateResourceOwnerPasswordCredentials, authenticateClientCredentials, authenticateRefreshToken);
     }
 
     @Bean
-    public ResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials(
+    public AuthenticateResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials(
             ClientRepository clientRepository,
             UserRepository userRepository,
             Hashing hashing,
@@ -178,7 +178,7 @@ public class ServiceContainer {
             JwtService jwtService,
             RefreshTokenService refreshTokenService
     ) {
-        return new ResourceOwnerPasswordCredentials(clientRepository, userRepository, hashing, jwsService, jwtService, refreshTokenService);
+        return new AuthenticateResourceOwnerPasswordCredentials(clientRepository, userRepository, hashing, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
