@@ -21,6 +21,9 @@ public class JpaQueryBuilderRefreshTokenRepository implements RefreshTokenReposi
     private final MapperUtil mapper;
     private final IdGenerator idGenerator;
 
+    private static final String VALUE = "value";
+    private static final String CLIENT_ID = "clientId";
+
     @Override
     @Transactional
     public RefreshToken save(RefreshToken refreshToken) {
@@ -41,6 +44,22 @@ public class JpaQueryBuilderRefreshTokenRepository implements RefreshTokenReposi
     }
 
     @Override
+    public Optional<RefreshToken> findByValue(String value) {
+        var criteriaBuilder = entityManager.getCriteriaBuilder();
+        var criteriaQuery = criteriaBuilder.createQuery(JpaRefreshToken.class);
+        var root = criteriaQuery.from(JpaRefreshToken.class);
+
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get(VALUE), value));
+
+        return entityManager.createQuery(criteriaQuery)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .map(mapper::refreshToken);
+    }
+
+    @Override
     public Optional<RefreshToken> findByValueAndClientId(String value, String clientId) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
         var criteriaQuery = criteriaBuilder.createQuery(JpaRefreshToken.class);
@@ -48,8 +67,8 @@ public class JpaQueryBuilderRefreshTokenRepository implements RefreshTokenReposi
 
         criteriaQuery.select(root)
             .where(criteriaBuilder.and(
-                criteriaBuilder.equal(root.get("value"), value),
-                criteriaBuilder.equal(root.get("clientId"), clientId)
+                criteriaBuilder.equal(root.get(VALUE), value),
+                criteriaBuilder.equal(root.get(CLIENT_ID), clientId)
             ));
 
         return entityManager.createQuery(criteriaQuery)
@@ -66,7 +85,7 @@ public class JpaQueryBuilderRefreshTokenRepository implements RefreshTokenReposi
         var criteriaDelete = criteriaBuilder.createCriteriaDelete(JpaRefreshToken.class);
         var root = criteriaDelete.from(JpaRefreshToken.class);
 
-        criteriaDelete.where(criteriaBuilder.equal(root.get("value"), value));
+        criteriaDelete.where(criteriaBuilder.equal(root.get(VALUE), value));
         entityManager.createQuery(criteriaDelete).executeUpdate();
     }
 

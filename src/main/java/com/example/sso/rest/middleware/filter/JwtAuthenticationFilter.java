@@ -18,6 +18,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -56,8 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-        var patterns = Arrays.asList(
-            patternParser.parse("POST /api/v1/users")
+        var patterns = List.of(
+                patternParser.parse("POST /api/v1/users")
         );
 
         return patterns.parallelStream()

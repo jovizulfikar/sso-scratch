@@ -1,6 +1,7 @@
 package com.example.sso.core.application.usecase.authentication.provider;
 
 import com.example.sso.core.common.exception.AppException;
+import com.example.sso.core.domain.entity.ApiScope;
 import com.example.sso.core.domain.oauth2.AuthorizationGrantType;
 import com.example.sso.core.domain.oauth2.TokenType;
 import com.example.sso.core.application.service.JwsService;
@@ -57,7 +58,7 @@ public class AuthenticateRefreshToken implements AuthenticationProvider {
         
         // generate access token
         var scopes = client.getApiScopes().stream()
-                .map(scope -> scope.getName())
+                .map(ApiScope::getName)
                 .collect(Collectors.toSet());
 
         var jws = jwsService.generateJws(client, scopes);

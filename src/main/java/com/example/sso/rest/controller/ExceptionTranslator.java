@@ -1,6 +1,8 @@
 package com.example.sso.rest.controller;
 
 import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
+import com.example.sso.core.application.usecase.revocation.provider.RevocationProvider;
+import com.example.sso.core.application.usecase.revocation.provider.RevocationProviderFactory;
 import com.example.sso.core.application.usecase.user.RegisterUserUseCase;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProvider;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
@@ -91,6 +93,26 @@ public class ExceptionTranslator {
                 pd.setType(URI.create("/errors/authentication/invalid-refresh-token"));
                 pd.setTitle("Invalid Refresh Token");
                 pd.setDetail("Refresh token is invalid or has expired.");
+                yield pd;
+            }
+            case RevocationProviderFactory.ERROR_UNSUPPORTED_TOKEN_TYPE: {
+                pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+                pd.setType(URI.create("/errors/revocation/unsupported-token-type"));
+                pd.setTitle("Unsupported Token Type");
+                pd.setDetail("The token type is not supported.");
+                yield pd;
+            }
+            case RevocationProvider.ERROR_UNKNOWN_CLIENT: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/revocation/invalid-client"));
+                pd.setTitle("Invalid Client");
+                pd.setDetail("Client authentication failed. Client is unknown.");
+                yield pd;
+            } case RevocationProvider.ERROR_INVALID_CLIENT_SECRET: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/revocation/invalid-grant"));
+                pd.setTitle("Invalid Grant");
+                pd.setDetail("The provided authorization grant is invalid.");
                 yield pd;
             }
             default: yield ExceptionTranslator.defaultProblemDetail();

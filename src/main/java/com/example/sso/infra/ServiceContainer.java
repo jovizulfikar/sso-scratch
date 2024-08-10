@@ -12,6 +12,9 @@ import com.example.sso.core.application.usecase.authentication.provider.Authenti
 import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
 import com.example.sso.core.application.usecase.oidc.GetJwksUseCase;
 import com.example.sso.core.application.usecase.oidc.GetOpenidConfigurationUseCase;
+import com.example.sso.core.application.usecase.revocation.provider.RevocationProviderFactory;
+import com.example.sso.core.application.usecase.revocation.provider.RevokeAccessToken;
+import com.example.sso.core.application.usecase.revocation.provider.RevokeRefreshToken;
 import com.example.sso.core.application.usecase.user.RegisterUserUseCase;
 import com.example.sso.core.port.repository.ApiScopeRepository;
 import com.example.sso.core.port.repository.ClientRepository;
@@ -194,5 +197,27 @@ public class ServiceContainer {
     @Bean
     public GetOpenidConfigurationUseCase getOpenidConfigurationUseCase(SsoConfig ssoConfig) {
         return new GetOpenidConfigurationUseCase(ssoConfig);
+    }
+
+    @Bean
+    public RevocationProviderFactory revocationProviderFactory(
+            RevokeAccessToken revokeAccessToken,
+            RevokeRefreshToken revokeRefreshToken)
+    {
+        return new RevocationProviderFactory(revokeAccessToken, revokeRefreshToken);
+    }
+
+    @Bean
+    public RevokeRefreshToken revokeRefreshToken(
+            RefreshTokenRepository refreshTokenRepository,
+            ClientRepository clientRepository,
+            Hashing hashing
+    ) {
+        return new RevokeRefreshToken(refreshTokenRepository, clientRepository, hashing);
+    }
+
+    @Bean
+    public RevokeAccessToken revokeAccessToken() {
+        return new RevokeAccessToken();
     }
 }
