@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 public class RevokeTokenRequest {
     private String clientId;
-    private String clientSecret;
     private String token;
     private String tokenTypeHint;
 }

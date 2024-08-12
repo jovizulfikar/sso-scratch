@@ -1,8 +1,8 @@
 package com.example.sso.rest.middleware.filter;
 
-import com.example.sso.core.application.service.KeyManager;
+import com.example.sso.core.application.service.ClientService;
 import com.example.sso.core.common.exception.AppException;
-import com.example.sso.core.port.security.JwtService;
+import com.example.sso.core.common.util.Base64;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,47 +20,50 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Order(2)
+@Order(3)
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class ClientAuthenticationFilter extends OncePerRequestFilter {
 
-    private final KeyManager keyManager;
-    private final JwtService jwtService;
+    private final ClientService clientService;
 
     private final PathPatternParser patternParser = new PathPatternParser();
 
-    public static final String ERROR_JWT_AUTH_FILTER_UNAUTHORIZED = "JWT_AUTH_FILTER.UNAUTHORIZED";
-
+    public static final String ERROR_CLIENT_AUTH_FILTER_UNAUTHORIZED = "CLIENT_AUTH_FILTER.UNAUTHORIZED";
 
     @Override
     @SneakyThrows
     protected void doFilterInternal(
-        @NonNull HttpServletRequest request, 
-        @NonNull HttpServletResponse response, 
-        @NonNull FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) {
         var authHeader = Optional.ofNullable(request.getHeader("Authorization")).orElse("");
 
-        String bearerToken;
-        if (authHeader.startsWith("Bearer") && authHeader.split("\\s+").length > 1) {
-            bearerToken = authHeader.substring(7);
+        String basicToken;
+        if (authHeader.startsWith("Basic") && authHeader.split("\\s+").length > 1) {
+            basicToken = Base64.decode(authHeader.substring(7));
         } else {
-            throw new AppException(ERROR_JWT_AUTH_FILTER_UNAUTHORIZED);
+            throw new AppException(ERROR_CLIENT_AUTH_FILTER_UNAUTHORIZED);
         }
-        
-        var claims = jwtService.verify(bearerToken, keyManager.getRsaPublicKey());
-        request.setAttribute("jwtClaims", claims);
+
+        var credentials = basicToken.split(":");
+        if (credentials.length < 2) {
+            throw new AppException(ERROR_CLIENT_AUTH_FILTER_UNAUTHORIZED);
+        }
+
+        var client = clientService.authenticate(credentials[0], credentials[1]);
+        request.setAttribute("client", client);
 
         filterChain.doFilter(request, response);
     }
-    
+
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
         var patterns = List.of(
-                patternParser.parse("POST /api/v1/users")
+                patternParser.parse("POST /api/v1/token/revoke")
         );
 
         return patterns.parallelStream()
                 .noneMatch(pattern -> pattern.matches(PathContainer.parsePath("POST " + request.getRequestURI())));
-	}
+    }
 }

@@ -6,6 +6,8 @@ import com.example.sso.core.application.usecase.authentication.provider.Authenti
 import com.example.sso.core.application.usecase.revocation.RevokeTokenRequest;
 import com.example.sso.core.application.usecase.revocation.RevokeTokenResponse;
 import com.example.sso.core.application.usecase.revocation.provider.RevocationProviderFactory;
+import com.example.sso.core.domain.entity.Client;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,13 @@ public class TokenController {
     }
 
     @PostMapping("/revoke")
-    public ResponseEntity<RevokeTokenResponse> revoke(@RequestBody RevokeTokenRequest revokeTokenRequest) {
+    public ResponseEntity<RevokeTokenResponse> revoke(
+            HttpServletRequest httpServletRequest,
+            @RequestBody RevokeTokenRequest revokeTokenRequest
+    ) {
+        var client = (Client) httpServletRequest.getAttribute("client");
+        revokeTokenRequest.setClientId(client.getClientId());
+
         var revocationProvider = revocationProviderFactory.getByTokenType(revokeTokenRequest.getTokenTypeHint());
         var response = revocationProvider.revoke(revokeTokenRequest);
         return ResponseEntity.ok(response);

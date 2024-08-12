@@ -1,5 +1,6 @@
 package com.example.sso.rest.controller;
 
+import com.example.sso.core.application.service.ClientService;
 import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
 import com.example.sso.core.application.usecase.revocation.provider.RevocationProvider;
 import com.example.sso.core.application.usecase.revocation.provider.RevocationProviderFactory;
@@ -8,6 +9,7 @@ import com.example.sso.core.application.usecase.authentication.provider.Authenti
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.sso.core.common.exception.AppException;
 import com.example.sso.core.common.exception.ValidationException;
+import com.example.sso.rest.middleware.filter.ClientAuthenticationFilter;
 import com.example.sso.rest.middleware.filter.JwtAuthenticationFilter;
 import com.example.sso.rest.middleware.interceptor.ApiScopeInterceptor;
 import lombok.AccessLevel;
@@ -82,6 +84,12 @@ public class ExceptionTranslator {
                 pd.setTitle("Unauthorized");
                 pd.setDetail("Bearer token is missing or invalid.");
                 yield pd;
+            } case ClientAuthenticationFilter.ERROR_CLIENT_AUTH_FILTER_UNAUTHORIZED: {
+                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+                pd.setType(URI.create("/errors/unauthorized"));
+                pd.setTitle("Unauthorized");
+                pd.setDetail("Basic token is missing or invalid.");
+                yield pd;
             } case ApiScopeInterceptor.ERROR_INVALID_SCOPE: {
                 pd = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
                 pd.setType(URI.create("/errors/forbidden"));
@@ -102,13 +110,13 @@ public class ExceptionTranslator {
                 pd.setDetail("The token type is not supported.");
                 yield pd;
             }
-            case RevocationProvider.ERROR_UNKNOWN_CLIENT: {
+            case ClientService.ERROR_UNKNOWN_CLIENT: {
                 pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
                 pd.setType(URI.create("/errors/revocation/invalid-client"));
                 pd.setTitle("Invalid Client");
                 pd.setDetail("Client authentication failed. Client is unknown.");
                 yield pd;
-            } case RevocationProvider.ERROR_INVALID_CLIENT_SECRET: {
+            } case ClientService.ERROR_INVALID_CLIENT_SECRET: {
                 pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
                 pd.setType(URI.create("/errors/revocation/invalid-grant"));
                 pd.setTitle("Invalid Grant");

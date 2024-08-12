@@ -1,14 +1,15 @@
 package com.example.sso.infra;
 
 import com.example.sso.core.application.config.SsoConfig;
+import com.example.sso.core.application.service.ClientService;
 import com.example.sso.core.application.service.JwsService;
 import com.example.sso.core.application.service.KeyManager;
 import com.example.sso.core.application.service.RefreshTokenService;
 import com.example.sso.core.application.usecase.apiscope.CreateApiScopeUseCase;
-import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticateClientCredentials;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticateRefreshToken;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticateResourceOwnerPasswordCredentials;
+import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
 import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
 import com.example.sso.core.application.usecase.oidc.GetJwksUseCase;
 import com.example.sso.core.application.usecase.oidc.GetOpenidConfigurationUseCase;
@@ -126,13 +127,12 @@ public class ServiceContainer {
 
     @Bean
     public AuthenticateClientCredentials clientCredentials(
-            ClientRepository clientRepository,
-            Hashing hashing,
+            ClientService clientService,
             JwsService jwsService,
             JwtService jwtService,
             RefreshTokenService refreshTokenService
     ) {
-        return new AuthenticateClientCredentials(clientRepository, hashing, jwsService, jwtService, refreshTokenService);
+        return new AuthenticateClientCredentials(jwsService, jwtService, refreshTokenService, clientService);
     }
 
     @Bean
@@ -153,14 +153,14 @@ public class ServiceContainer {
 
     @Bean
     public AuthenticateRefreshToken refreshToken(
-            ClientRepository clientRepository,
+            ClientService clientService,
             Hashing hashing,
             RefreshTokenRepository refreshTokenRepository,
             JwsService jwsService,
             JwtService jwtService,
             RefreshTokenService refreshTokenService
     ) {
-        return new AuthenticateRefreshToken(clientRepository, hashing, refreshTokenRepository, jwsService, jwtService, refreshTokenService);
+        return new AuthenticateRefreshToken(clientService, refreshTokenRepository, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
@@ -174,14 +174,14 @@ public class ServiceContainer {
 
     @Bean
     public AuthenticateResourceOwnerPasswordCredentials resourceOwnerPasswordCredentials(
-            ClientRepository clientRepository,
+            ClientService clientService,
             UserRepository userRepository,
             Hashing hashing,
             JwsService jwsService,
             JwtService jwtService,
             RefreshTokenService refreshTokenService
     ) {
-        return new AuthenticateResourceOwnerPasswordCredentials(clientRepository, userRepository, hashing, jwsService, jwtService, refreshTokenService);
+        return new AuthenticateResourceOwnerPasswordCredentials(clientService, userRepository, hashing, jwsService, jwtService, refreshTokenService);
     }
 
     @Bean
@@ -208,16 +208,17 @@ public class ServiceContainer {
     }
 
     @Bean
-    public RevokeRefreshToken revokeRefreshToken(
-            RefreshTokenRepository refreshTokenRepository,
-            ClientRepository clientRepository,
-            Hashing hashing
-    ) {
-        return new RevokeRefreshToken(refreshTokenRepository, clientRepository, hashing);
+    public RevokeRefreshToken revokeRefreshToken(RefreshTokenRepository refreshTokenRepository) {
+        return new RevokeRefreshToken(refreshTokenRepository);
     }
 
     @Bean
     public RevokeAccessToken revokeAccessToken() {
         return new RevokeAccessToken();
+    }
+
+    @Bean
+    public ClientService clientService(ClientRepository clientRepository, Hashing hashing) {
+        return new ClientService(clientRepository, hashing);
     }
 }
