@@ -41,7 +41,7 @@ public class ClientAuthenticationFilter extends OncePerRequestFilter {
 
         String basicToken;
         if (authHeader.startsWith("Basic") && authHeader.split("\\s+").length > 1) {
-            basicToken = Base64.decode(authHeader.substring(7));
+            basicToken = Base64.decode(authHeader.substring(6));
         } else {
             throw new AppException(ERROR_CLIENT_AUTH_FILTER_UNAUTHORIZED);
         }

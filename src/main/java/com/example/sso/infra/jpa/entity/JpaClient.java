@@ -22,24 +22,24 @@ public class JpaClient {
     @Column(name = "client_id", unique = true, nullable = false)
     private String clientId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "client_id", insertable = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "client_id")
     private Set<JpaClientSecret> secrets;
 
     @Column(name = "name")
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "client_grant_types", joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "grant_type")
     private Set<String> grantTypes;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "client_audience_uris", joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "audience_uri")
     private Set<String> audienceUris;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "client_api_scope", 
         joinColumns = @JoinColumn(name = "client_id"), 

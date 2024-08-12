@@ -1,12 +1,11 @@
 package com.example.sso.rest.controller;
 
 import com.example.sso.core.application.service.ClientService;
-import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
-import com.example.sso.core.application.usecase.revocation.provider.RevocationProvider;
-import com.example.sso.core.application.usecase.revocation.provider.RevocationProviderFactory;
-import com.example.sso.core.application.usecase.user.RegisterUserUseCase;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProvider;
 import com.example.sso.core.application.usecase.authentication.provider.AuthenticationProviderFactory;
+import com.example.sso.core.application.usecase.client.RegisterClientUseCase;
+import com.example.sso.core.application.usecase.revocation.provider.RevocationProviderFactory;
+import com.example.sso.core.application.usecase.user.RegisterUserUseCase;
 import com.example.sso.core.common.exception.AppException;
 import com.example.sso.core.common.exception.ValidationException;
 import com.example.sso.rest.middleware.filter.ClientAuthenticationFilter;
@@ -59,18 +58,6 @@ public class ExceptionTranslator {
                 pd.setType(URI.create("/errors/authentication/unsupported-grant-type"));
                 pd.setTitle("Unsupported Grant Type");
                 pd.setDetail("The authorization grant type is not supported by the authorization server.");
-                yield pd;
-            } case AuthenticationProvider.ERROR_UNKNOWN_CLIENT: {
-                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
-                pd.setType(URI.create("/errors/authentication/invalid-client"));
-                pd.setTitle("Invalid Client");
-                pd.setDetail("Client authentication failed. Client is unknown.");
-                yield pd;
-            } case AuthenticationProvider.ERROR_INVALID_CLIENT_SECRET: {
-                pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
-                pd.setType(URI.create("/errors/authentication/invalid-grant"));
-                pd.setTitle("Invalid Grant");
-                pd.setDetail("The provided authorization grant is invalid.");
                 yield pd;
             } case AuthenticationProvider.ERROR_UNAUTHORIZED_AUTH_FLOW: {
                 pd = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
