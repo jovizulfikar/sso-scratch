@@ -51,6 +51,17 @@ public class BitbucketJoseJwtService implements JwtService {
                 .build();
 
         var jwtClaims = jwtConsumer.processToClaims(jwt);
-        return mapper.fromJson(jwtClaims.getRawJson(), new TypeReference<JwtClaims>() {});
+        return mapper.fromJson(jwtClaims.getRawJson(), new TypeReference<>() {});
+    }
+
+    @Override
+    @SneakyThrows
+    public JwtClaims getClaims(String jwt, Key jwsPublicKey) {
+        var jwtConsumer = new JwtConsumerBuilder()
+                .setVerificationKey(jwsPublicKey)
+                .build();
+
+        var jwtClaims = jwtConsumer.processToClaims(jwt);
+        return mapper.fromJson(jwtClaims.getRawJson(), new TypeReference<>() {});
     }
 }

@@ -17,19 +17,13 @@ import com.example.sso.core.application.usecase.revocation.provider.RevocationPr
 import com.example.sso.core.application.usecase.revocation.provider.RevokeAccessToken;
 import com.example.sso.core.application.usecase.revocation.provider.RevokeRefreshToken;
 import com.example.sso.core.application.usecase.user.RegisterUserUseCase;
-import com.example.sso.core.port.repository.ApiScopeRepository;
-import com.example.sso.core.port.repository.ClientRepository;
-import com.example.sso.core.port.repository.RefreshTokenRepository;
-import com.example.sso.core.port.repository.UserRepository;
+import com.example.sso.core.port.repository.*;
 import com.example.sso.core.port.security.Hashing;
 import com.example.sso.core.port.security.JwtService;
 import com.example.sso.core.port.util.IdGenerator;
 import com.example.sso.core.port.util.PasswordGenerator;
 import com.example.sso.infra.config.AppSsoConfig;
-import com.example.sso.infra.jpa.repository.JpaQueryBuilderApiScopeRepository;
-import com.example.sso.infra.jpa.repository.JpaQueryBuilderClientRepository;
-import com.example.sso.infra.jpa.repository.JpaQueryBuilderRefreshTokenRepository;
-import com.example.sso.infra.jpa.repository.JpaQueryBuilderUserRepository;
+import com.example.sso.infra.jpa.repository.*;
 import com.example.sso.infra.security.BcryptHash;
 import com.example.sso.infra.security.BitbucketJoseJwtService;
 import com.example.sso.infra.util.NanoIdGenerator;
@@ -213,12 +207,19 @@ public class ServiceContainer {
     }
 
     @Bean
-    public RevokeAccessToken revokeAccessToken() {
-        return new RevokeAccessToken();
+    public RevokeAccessToken revokeAccessToken(AccessTokenBlacklistRepostory accessTokenBlacklistRepostory) {
+        return new RevokeAccessToken(accessTokenBlacklistRepostory);
     }
 
     @Bean
     public ClientService clientService(ClientRepository clientRepository, Hashing hashing) {
         return new ClientService(clientRepository, hashing);
+    }
+
+    @Bean
+    public AccessTokenBlacklistRepostory accessTokenBlacklistRepostory(
+            JpaQueryBuilderAccessTokenBlacklistRepository jpaQueryBuilderAccessTokenBlacklistRepository
+    ) {
+        return jpaQueryBuilderAccessTokenBlacklistRepository;
     }
 }

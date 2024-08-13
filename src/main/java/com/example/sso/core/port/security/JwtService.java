@@ -8,4 +8,5 @@ import java.security.Key;
 public interface JwtService {
     String sign(JsonWebSignature jws);
     JwtClaims verify(String jwt, Key jwsKey);
+    JwtClaims getClaims(String jwt, Key jwsKey);
 }

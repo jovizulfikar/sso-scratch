@@ -85,3 +85,13 @@ databaseChangeLog:
       rollback:
         - sqlFile:
             path: "db/migration/20240710154900_rollback_create_table_refresh_tokens.sql"
+
+  - changeSet:
+      id: "20240813165200"
+      author: "jovizulfikar"
+      changes:
+        - sqlFile:
+            path: "db/migration/20240813165200_create_table_access_token_blacklist.sql"
+      rollback:
+        - sqlFile:
+            path: "db/migration/20240813165200_rollback_create_table_access_token_blacklist.sql"
